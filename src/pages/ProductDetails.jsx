@@ -382,6 +382,73 @@ export default function ProductDetails() {
                                     </div>
                                 )}
 
+                                {(product.subtitle || product.shortDescription || product.packSize || product.featuredTag) && (
+                                    <div className="rounded-2xl border border-amber-200 bg-amber-50/70 p-4 md:p-5">
+                                        {product.featuredTag && (
+                                            <span className="inline-flex items-center rounded-full bg-amber-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-amber-700 mb-3">
+                                                {product.featuredTag}
+                                            </span>
+                                        )}
+                                        {product.subtitle && (
+                                            <h3 className="text-base md:text-lg font-bold text-text-heading mb-2">{product.subtitle}</h3>
+                                        )}
+                                        {product.shortDescription && (
+                                            <p className="text-sm text-text-body leading-relaxed mb-3">{product.shortDescription}</p>
+                                        )}
+                                        {product.packSize && (
+                                            <div className="inline-flex rounded-full border border-amber-300 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.15em] text-text-heading">
+                                                {product.packSize}
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+
+                                {(product.keyPoints?.length || product.benefits?.length || product.ingredients?.length) && (
+                                    <div className="grid gap-5 md:grid-cols-3">
+                                        {product.keyPoints?.length > 0 && (
+                                            <div className="rounded-2xl border border-border-light bg-bg-section p-4">
+                                                <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-text-heading mb-3">Key Points</h4>
+                                                <ul className="space-y-2 text-sm text-text-body">
+                                                    {product.keyPoints.map((point, index) => (
+                                                        <li key={`${point}-${index}`} className="flex items-start gap-2">
+                                                            <span className="mt-1 h-2.5 w-2.5 rounded-full bg-accent-gold" />
+                                                            <span>{point}</span>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        )}
+
+                                        {product.benefits?.length > 0 && (
+                                            <div className="rounded-2xl border border-border-light bg-bg-section p-4">
+                                                <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-text-heading mb-3">Benefits</h4>
+                                                <ul className="space-y-2 text-sm text-text-body">
+                                                    {product.benefits.map((benefit, index) => (
+                                                        <li key={`${benefit}-${index}`} className="flex items-start gap-2">
+                                                            <span className="mt-1 h-2.5 w-2.5 rounded-full bg-emerald-500" />
+                                                            <span>{benefit}</span>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        )}
+
+                                        {product.ingredients?.length > 0 && (
+                                            <div className="rounded-2xl border border-border-light bg-bg-section p-4">
+                                                <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-text-heading mb-3">Ingredients</h4>
+                                                <ul className="space-y-2 text-sm text-text-body">
+                                                    {product.ingredients.map((ingredient, index) => (
+                                                        <li key={`${ingredient}-${index}`} className="flex items-start gap-2">
+                                                            <span className="mt-1 h-2.5 w-2.5 rounded-full bg-orange-400" />
+                                                            <span>{ingredient}</span>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+
                                 {/* Accordion / Dynamic Sections */}
                                 {product.additionalSections && product.additionalSections.length > 0 && (
                                     <Accordion items={product.additionalSections} />

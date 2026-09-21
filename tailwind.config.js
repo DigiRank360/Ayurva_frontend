@@ -7,71 +7,80 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Custom Premium Theme Colors
+        // Honey / organic storefront palette from the reference
         text: {
-          heading: '#2A1416', // Deep Wine Brown
-          body: '#4A2A2C',    // Soft Maroon Brown
-          muted: '#7B5A5C',   // Muted Rose Brown
-          disabled: '#B9A3A5', // Soft Dusty Rose
+          heading: '#173d3a',
+          body: '#355a59',
+          muted: '#6a7f7d',
+          disabled: '#b8c3bf',
         },
         bg: {
-          main: '#FFF8F2',    // Warm Cream
-          section: '#FAEFE6', // Section Divider
-          card: '#FFFFFF',    // Product Cards
+          main: '#f5f3ea',
+          section: '#eae7d1',
+          card: '#fffdf9',
+          soft: '#f1ecdb',
         },
         highlight: {
-          soft: '#F1E0D2',    // Hover BG
+          soft: '#efe7c3',
+          gold: '#f0be54',
+          honey: '#f7c664',
         },
-
-        // Shadcn UI Colors (Merged)
+        brand: {
+          teal: '#114f4d',
+          tealDark: '#0d3c3a',
+          olive: '#dfe8b4',
+          gold: '#e8b85b',
+          amber: '#f5d58a',
+          cream: '#f3efe1',
+        },
         border: {
-          DEFAULT: "hsl(var(--border))",
-          light: '#E6D3C5',   // Custom: Soft Gold Tint
+          DEFAULT: '#e4ddc8',
+          light: '#e9e2cc',
         },
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
+        input: '#f7f4ee',
+        ring: '#e9b85d',
+        background: '#f5f3ea',
+        foreground: '#173d3a',
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: '#114f4d',
+          foreground: '#ffffff',
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: '#e9b85d',
+          foreground: '#173d3a',
         },
         destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+          DEFAULT: '#d65b47',
+          foreground: '#ffffff',
         },
         muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+          DEFAULT: '#6a7f7d',
+          foreground: '#355a59',
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-          gold: '#C9A06C',    // Custom: Focus Ring / Button Secondary
+          DEFAULT: '#e9b85d',
+          foreground: '#173d3a',
+          gold: '#e9b85d',
         },
         popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
+          DEFAULT: '#ffffff',
+          foreground: '#173d3a',
         },
         card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+          DEFAULT: '#ffffff',
+          foreground: '#173d3a',
         },
         shadow: {
-          soft: 'rgba(75, 30, 30, 0.15)',
-          hover: 'rgba(75, 30, 30, 0.22)',
+          soft: 'rgba(17, 79, 77, 0.12)',
+          hover: 'rgba(17, 79, 77, 0.18)',
         }
       },
       fontFamily: {
         sans: ['Arimo', 'sans-serif'],
       },
       boxShadow: {
-        'soft': '0 6px 18px rgba(75, 30, 30, 0.15)',
-        'hover': '0 10px 28px rgba(75, 30, 30, 0.22)',
+        soft: '0 8px 22px rgba(17, 79, 77, 0.12)',
+        hover: '0 14px 28px rgba(17, 79, 77, 0.18)',
       },
       borderRadius: {
         lg: `var(--radius)`,

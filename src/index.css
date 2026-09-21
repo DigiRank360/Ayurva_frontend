@@ -8,72 +8,41 @@
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
-
-
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
-
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-
     --primary: 355 35% 12%;
-    /* #2A1416 Deep Wine */
     --primary-foreground: 30 15% 98%;
-    /* Warm Cream */
-
     --secondary: 42 47% 61%;
-    /* #C9A06C Accent Gold */
     --secondary-foreground: 355 35% 12%;
-    /* Deep Wine */
-
     --muted: 355 15% 42%;
-    /* #7B5A5C */
     --muted-foreground: 215.4 16.3% 46.9%;
-
     --accent: 30 15% 98%;
-    /* Warm Cream */
     --accent-foreground: 222.2 47.4% 11.2%;
-
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-
     --border: 355 20% 88%;
-    /* #E6D3C5 */
     --input: 214.3 31.8% 91.4%;
     --ring: 42 47% 61%;
-    /* Accent Gold */
-
     --radius: 0.5rem;
   }
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+  * {
+    @apply box-border;
+  }
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+  html {
+    scroll-behavior: smooth;
+  }
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+  body {
+    @apply m-0 bg-[#f5f3ea] text-[#173d3a] antialiased;
+    font-family: 'Arimo', sans-serif;
+  }
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+  img {
+    @apply block max-w-full;
   }
 
   h1,
@@ -82,6 +51,6 @@
   h4,
   h5,
   h6 {
-    @apply text-text-heading font-bold font-sans;
+    @apply text-[#173d3a] font-bold font-sans;
   }
 }

@@ -80,11 +80,11 @@ const Header = () => {
                 className={cn(
                     "fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-in-out border-b",
                     isScrolled
-                        ? "bg-white/95 backdrop-blur-md shadow-md border-border-light py-2"
-                        : "bg-bg-section/95 border-transparent py-2"
+                        ? "bg-[#f7f4ee]/80 backdrop-blur-xl shadow-[0_10px_30px_rgba(8,29,30,0.12)] border-[#cfd8d1] py-2"
+                        : "bg-white/10 backdrop-blur-md border-white/20 py-2"
                 )}
             >
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center">
 
                         {/* Mobile Menu Button + Search - Left */}
@@ -108,7 +108,9 @@ const Header = () => {
                         {/* Logo - Center/Left */}
                         <div className="flex-shrink-0 flex items-center justify-center md:justify-start flex-1 md:flex-none">
                             <Link to="/" className="flex items-center gap-2 group">
-                                <img src={logo} alt="Luga Vastra Logo" className="h-10 w-auto md:h-16 transition-transform transform group-hover:scale-105 drop-shadow-xl" />
+                                <div className="relative h-12 w-44 overflow-hidden rounded-xl bg-white/90 shadow-[0_6px_18px_rgba(15,32,32,0.12)] ring-1 ring-[#d7c477]/40 transition-transform duration-300 group-hover:scale-[1.03] sm:h-14 sm:w-52">
+                                    <img src={logo} alt="Ayurva PRO" className="absolute inset-0 h-full w-full object-cover object-[center_42%]" />
+                                </div>
                             </Link>
                         </div>
 
@@ -119,13 +121,13 @@ const Header = () => {
                                     key={link.name}
                                     to={link.path}
                                     className={cn(
-                                        "text-sm font-bold uppercase tracking-widest hover:text-accent-gold transition-colors relative group py-2",
-                                        location.pathname + location.search === link.path ? "text-accent-gold" : "text-text-heading"
+                                        "text-[11px] font-bold uppercase tracking-[0.2em] hover:text-[#0d8a7c] transition-colors relative group py-2",
+                                        location.pathname + location.search === link.path ? "text-[#0d8a7c]" : "text-[#173d3a]"
                                     )}
                                 >
                                     {link.name}
                                     <span className={cn(
-                                        "absolute bottom-0 left-0 w-full h-0.5 bg-accent-gold transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100",
+                                        "absolute bottom-0 left-0 w-full h-0.5 bg-[#0d8a7c] transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100",
                                         location.pathname + location.search === link.path && "scale-x-100"
                                     )}></span>
                                 </Link>
@@ -139,9 +141,9 @@ const Header = () => {
                                 <input
                                     type="text"
                                     placeholder="Search"
-                                    className="w-0 group-hover:w-48 focus:w-48 transition-all duration-300 border-b border-transparent focus:border-accent-gold outline-none text-sm bg-transparent placeholder-transparent group-hover:placeholder-gray-400 focus:placeholder-gray-400 pl-7"
+                                    className="w-0 group-hover:w-48 focus:w-48 transition-all duration-300 border-b border-transparent focus:border-[#0d8a7c] outline-none text-sm bg-transparent placeholder-transparent group-hover:placeholder-gray-400 focus:placeholder-gray-400 pl-7 text-[#173d3a]"
                                 />
-                                <Search className="absolute left-0 top-1/2 -translate-y-1/2 text-text-heading cursor-pointer hover:text-accent-gold transition-colors" size={20} />
+                                <Search className="absolute left-0 top-1/2 -translate-y-1/2 text-[#173d3a] cursor-pointer hover:text-[#0d8a7c] transition-colors" size={20} />
                             </div>
 
                             {/* Mobile Search Icon */}
@@ -152,16 +154,16 @@ const Header = () => {
                                 <Search size={20} />
                             </button>
 
-                            <Link to="/wishlist" className="text-text-heading hover:text-accent-gold transition-colors hidden sm:block p-1">
-                                <Heart size={20} />
+                            <Link to="/wishlist" className="text-[#173d3a] hover:text-[#0d8a7c] transition-colors hidden sm:block p-1.5 rounded-full bg-[#f9f7f2]/70 shadow-sm border border-white/20 backdrop-blur-sm">
+                                <Heart size={18} />
                             </Link>
                             <button
                                 onClick={() => setIsCartOpen(true)}
-                                className="text-text-heading hover:text-accent-gold transition-colors relative p-1"
+                                className="text-[#173d3a] hover:text-[#0d8a7c] transition-colors relative p-1.5 rounded-full bg-[#f9f7f2]/70 shadow-sm border border-white/20 backdrop-blur-sm"
                             >
-                                <ShoppingBag size={20} />
+                                <ShoppingBag size={18} />
                                 {cartCount > 0 && (
-                                    <span className="absolute -top-1 -right-1 bg-accent-gold text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
+                                    <span className="absolute -top-1 -right-1 bg-[#0d8a7c] text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
                                         {cartCount > 9 ? '9+' : cartCount}
                                     </span>
                                 )}
@@ -173,7 +175,7 @@ const Header = () => {
                             ) : (
                                 <button
                                     onClick={() => setIsLoginModalOpen(true)}
-                                    className="hidden sm:flex items-center gap-2 px-4 py-2 bg-accent-gold text-text-heading font-semibold rounded-lg hover:bg-accent-gold/90 transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105"
+                                    className="hidden sm:flex items-center gap-2 px-4 py-2 bg-[#f0b535] text-[#173d3a] font-semibold rounded-lg border border-[#e1b15f] shadow-[0_10px_22px_rgba(240,181,53,0.28)] hover:bg-[#ebad2f] transition-all duration-300"
                                     title="Login"
                                 >
                                     <LogIn size={18} />
@@ -233,7 +235,9 @@ const Header = () => {
                         <div className="flex flex-col h-full bg-[#1A0F0F] text-white">
                             {/* Header of Drawer */}
                             <div className="p-6 flex justify-between items-center border-b border-white/10">
-                                <img src={logo} alt="Luga Vastra" className="h-8 w-auto opacity-90" />
+                                <div className="relative h-14 w-48 overflow-hidden rounded-xl bg-white/95 shadow-[0_8px_20px_rgba(0,0,0,0.18)] ring-1 ring-[#d7c477]/50">
+                                    <img src={logo} alt="Ayurva PRO" className="absolute inset-0 h-full w-full object-cover object-[center_42%]" />
+                                </div>
                                 <button
                                     onClick={() => setIsMobileMenuOpen(false)}
                                     className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-accent-gold transition-colors"

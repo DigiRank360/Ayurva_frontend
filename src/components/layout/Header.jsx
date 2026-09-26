@@ -108,8 +108,8 @@ const Header = () => {
                         {/* Logo - Center/Left */}
                         <div className="flex-shrink-0 flex items-center justify-center md:justify-start flex-1 md:flex-none">
                             <Link to="/" className="flex items-center gap-2 group">
-                                <div className="relative h-12 w-44 overflow-hidden rounded-xl bg-white/90 shadow-[0_6px_18px_rgba(15,32,32,0.12)] ring-1 ring-[#d7c477]/40 transition-transform duration-300 group-hover:scale-[1.03] sm:h-14 sm:w-52">
-                                    <img src={logo} alt="Ayurva PRO" className="absolute inset-0 h-full w-full object-cover object-[center_42%]" />
+                                <div className="relative h-12 w-44 overflow-hidden bg-transparent transition-transform duration-300 group-hover:scale-[1.03] sm:h-14 sm:w-52">
+                                    <img src={logo} alt="Ayurva PRO" className="absolute inset-0 h-full w-full object-contain" />
                                 </div>
                             </Link>
                         </div>
@@ -235,8 +235,8 @@ const Header = () => {
                         <div className="flex flex-col h-full bg-[#1A0F0F] text-white">
                             {/* Header of Drawer */}
                             <div className="p-6 flex justify-between items-center border-b border-white/10">
-                                <div className="relative h-14 w-48 overflow-hidden rounded-xl bg-white/95 shadow-[0_8px_20px_rgba(0,0,0,0.18)] ring-1 ring-[#d7c477]/50">
-                                    <img src={logo} alt="Ayurva PRO" className="absolute inset-0 h-full w-full object-cover object-[center_42%]" />
+                                <div className="relative h-14 w-48 overflow-hidden bg-transparent">
+                                    <img src={logo} alt="Ayurva PRO" className="absolute inset-0 h-full w-full object-contain" />
                                 </div>
                                 <button
                                     onClick={() => setIsMobileMenuOpen(false)}

@@ -141,9 +141,9 @@ export default function Shop() {
         <Layout>
             {/* Premium Page Header with Background Image */}
             <PageHero
-                title="The Collection"
-                subtitle="Handcrafted luxury, designed for the modern connoisseur."
-                backgroundImage="https://media.istockphoto.com/id/93355119/photo/indian-saris.jpg?s=612x612&w=0&k=20&c=afmfiTJg0VAmIY6P_TJ_JYsTfGhUdevv18WXQRUZ8NQ="
+                title="The Wellness Collection"
+                subtitle="Thoughtfully made Ayurvedic essentials for everyday balance."
+                backgroundImage="https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&fit=crop&w=1800&q=85"
                 currentPage="Shop"
             />
 

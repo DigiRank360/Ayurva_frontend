@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getCategories, BASE_URL } from '@/lib/api';
+import { getCategories } from '@/lib/api';
 import useAsync from '@/hooks/useAsync';
 import { getImageUrl } from '@/lib/utils';
 

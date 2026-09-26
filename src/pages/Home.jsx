@@ -2,9 +2,12 @@ import React from 'react';
 import { ArrowRight, ShoppingBag, Star, Leaf, Truck, ShieldCheck, Sparkles } from 'lucide-react';
 import Layout from '@/components/layout/Layout';
 import BannerSlider from '@/components/home/BannerSlider';
+import CircularCategories from '@/components/home/CircularCategories';
 import CategoryGrid from '@/components/home/CategoryGrid';
 import TrendingSection from '@/components/home/TrendingSection';
 import NewArrivals from '@/components/home/NewArrivals';
+import CustomerReviews from '@/components/home/CustomerReviews';
+import Newsletter from '@/components/home/Newsletter';
 
 const heroCards = [
   { name: 'Wildflower', image: 'https://images.unsplash.com/photo-1589987607602-7d1f394f4a6d?auto=format&fit=crop&w=900&q=80' },
@@ -45,7 +48,7 @@ export default function Home() {
     <Layout>
       <div className="bg-[#f3f0ea] text-[#173d3a]">
         <BannerSlider />
-        <CategoryGrid />
+        <CircularCategories />
         <TrendingSection />
         <NewArrivals />
         <section className="mx-auto max-w-[1200px] px-4 py-12 sm:px-6 lg:px-8">
@@ -67,6 +70,9 @@ export default function Home() {
             </div>
           </div>
         </section>
+        <CustomerReviews />
+        <Newsletter />
+        <CategoryGrid />
       </div>
     </Layout>
   );

@@ -7,48 +7,48 @@ const reviews = [
         name: "Priya Sharma",
         location: "Mumbai",
         rating: 5,
-        text: "The Banarasi saree was the highlight of my engagement. Felt absolutely royal!",
-        image: "https://placehold.co/64x64"
+        text: "The herbal blend has become a simple and comforting part of my morning routine.",
+        image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=128&q=80"
     },
     {
         id: 2,
         name: "Aditi Rao",
         location: "Bangalore",
         rating: 5,
-        text: "Authentic, heavy, and purely magical. Luga Vastra is now my go-to.",
-        image: "https://placehold.co/64x64"
+        text: "I love knowing exactly what goes into these products. Gentle, natural, and thoughtfully made.",
+        image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=128&q=80"
     },
     {
         id: 3,
         name: "Sanya Malhotra",
         location: "Delhi",
         rating: 4,
-        text: "Vibrant colors and such delicate embroidery. Loved it!",
-        image: "https://placehold.co/64x64"
+        text: "The digestive wellness range fits so easily into my everyday self-care ritual.",
+        image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=128&q=80"
     },
     {
         id: 4,
         name: "Mira Kapoor",
         location: "Jaipur",
         rating: 5,
-        text: "Preserving heritage with such grace. Got so many compliments.",
-        image: "https://placehold.co/64x64"
+        text: "Ayurva Pro makes wellness feel practical, calm, and easy to stay consistent with.",
+        image: "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=128&q=80"
     },
     {
         id: 5,
         name: "Ananya Pandey",
         location: "Lucknow",
         rating: 5,
-        text: "The fabric breathes luxury. Worth every penny.",
-        image: "https://placehold.co/64x64"
+        text: "The natural ingredients and quality packaging give me complete confidence in every order.",
+        image: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=128&q=80"
     },
     {
         id: 6,
         name: "Kiara Advani",
         location: "Hyderabad",
         rating: 5,
-        text: "Stunning craftsmanship. It feels like a piece of art.",
-        image: "https://placehold.co/64x64"
+        text: "A beautiful way to bring a little more balance and intention into busy days.",
+        image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=128&q=80"
     }
 ];
 
@@ -90,7 +90,7 @@ export default function CustomerReviews() {
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 text-center">
                 <span className="text-accent-gold font-bold uppercase tracking-[0.2em] text-xs mb-3 block animate-in fade-in slide-in-from-bottom-2">Testimonials</span>
-                <h2 className="text-2xl md:text-4xl font-sans font-bold text-text-heading mb-6">Loved by Thousands</h2>
+                <h2 className="text-2xl md:text-4xl font-sans font-bold text-text-heading mb-6">Loved by Wellness Seekers</h2>
                 <div className="w-24 h-1 bg-accent-gold mx-auto rounded-full"></div>
             </div>
 

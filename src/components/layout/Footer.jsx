@@ -1,66 +1,168 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Twitter, Youtube, MapPin, Phone, Mail, ArrowRight } from 'lucide-react';
-import logo from '@/assets/logo.png';
+import { 
+    Facebook, 
+    Instagram, 
+    Youtube, 
+    MapPin, 
+    Phone, 
+    Mail, 
+    ArrowRight 
+} from 'lucide-react';
 
-const Footer = () => {
+// Default Logo import (aap custom path pass kar sakte hain ya prop se override kar sakte hain)
+import defaultLogo from '@/assets/logo.png';
+
+const Footer = ({ 
+    logoSrc = defaultLogo, 
+    brandName = "", 
+    socialLinks 
+}) => {
+    // Default Social Links Array (Aap easily apne URLs ya Icons change kar sakte hain)
+    const defaultSocials = [
+        { name: 'Facebook', icon: Facebook, href: 'https://www.facebook.com/profile.php?id=61594252682451' },
+        { name: 'Instagram', icon: Instagram, href: 'https://www.instagram.com/ayuvapro/?hl=en' },
+        // { name: 'Twitter', icon: Twitter, href: 'https://twitter.com' },
+        { name: 'Youtube', icon: Youtube, href: '#' }
+    ];
+
+    const socials = socialLinks || defaultSocials;
+
     return (
-        <footer className="bg-[#0d4c4a] text-white pt-20 pb-10 border-t border-white/10 relative overflow-hidden font-sans">
-            <div className="absolute inset-0 opacity-[0.08]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '32px 32px' }}></div>
+        <footer className="bg-[#0b3c3a] text-white pt-20 pb-12 border-t border-white/10 relative overflow-hidden font-sans">
+            {/* Background Subtle Grid Effect */}
+            <div 
+                className="absolute inset-0 opacity-[0.05] pointer-events-none" 
+                style={{ 
+                    backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', 
+                    backgroundSize: '28px 28px' 
+                }} 
+            />
 
-            <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-14">
-                    <div className="lg:col-span-2 space-y-6">
-                        <Link to="/" className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2">
-                            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#f1d055] text-[12px] font-black text-[#18312f]">S</div>
-                            <span className="text-xl font-black tracking-[0.12em] text-white">STORY</span>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                {/* Main Grid Section */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-16 border-b border-white/10">
+                    
+                    {/* Brand Column */}
+                    <div className="lg:col-span-4 space-y-6">
+                        <Link to="/" className="inline-flex items-center gap-3 group">
+                            {logoSrc ? (
+                                <img 
+                                    src={logoSrc} 
+                                    alt={`${brandName} Logo`} 
+                                    className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105" 
+                                />
+                            ) : (
+                                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#f1d055] text-sm font-black text-[#18312f] shadow-md">
+                                    {brandName.charAt(0)}
+                                </div>
+                            )}
+                            <span className="text-2xl font-black tracking-widest text-white">
+                                {brandName}
+                            </span>
                         </Link>
-                        <p className="max-w-sm text-sm leading-7 text-[#dfeee9]">
-                            Pure honey, natural wellness, and handcrafted goodness for everyday health.
+
+                        <p className="max-w-sm text-sm leading-relaxed text-[#dfeee9]/80 font-normal">
+                            Pure honey, natural wellness, and handcrafted goodness harvested directly for your everyday health and vitality.
                         </p>
-                        <div className="flex gap-3">
-                            {[Facebook, Instagram, Youtube].map((Icon, i) => (
-                                <a key={i} href="#" className="flex h-10 w-10 items-center justify-center rounded-full bg-white/7 text-white/80 transition hover:bg-[#f1d055] hover:text-[#173d3a]">
-                                    <Icon size={18} />
-                                </a>
-                            ))}
+
+                        {/* Social Icons Section */}
+                        <div className="flex items-center gap-3 pt-2">
+                            {socials.map((social, index) => {
+                                const IconComponent = social.icon;
+                                return (
+                                    <a 
+                                        key={social.name || index} 
+                                        href={social.href || '#'} 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        aria-label={social.name}
+                                        className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 border border-white/10 text-white/80 transition-all duration-300 hover:bg-[#f1d055] hover:text-[#0b3c3a] hover:border-[#f1d055] hover:scale-110"
+                                    >
+                                        <IconComponent size={18} />
+                                    </a>
+                                );
+                            })}
                         </div>
                     </div>
 
-                    <div>
-                        <h4 className="mb-6 text-[11px] font-bold uppercase tracking-[0.2em] text-[#f1d055]">Explore</h4>
-                        <ul className="space-y-3 text-sm text-[#dfeee9]">
-                            {['About Us', 'New Arrivals', 'Best Sellers', 'Our Story', 'Gift Boxes'].map((item) => (
-                                <li key={item}><Link to="/shop" className="transition hover:text-white">{item}</Link></li>
+                    {/* Quick Links: Explore */}
+                    <div className="lg:col-span-2">
+                        <h4 className="mb-6 text-xs font-bold uppercase tracking-[0.2em] text-[#f1d055]">
+                            Explore
+                        </h4>
+                        <ul className="space-y-3.5 text-sm text-[#dfeee9]/80">
+                            {[
+                                { name: 'About Us', path: '/about' },
+                                { name: 'New Arrivals', path: '/shop' },
+                                { name: 'Best Sellers', path: '/shop' },
+                                { name: 'Our Story', path: '/story' },
+                                { name: 'Gift Boxes', path: '/gifts' }
+                            ].map((item) => (
+                                <li key={item.name}>
+                                    <Link to={item.path} className="transition-colors hover:text-white hover:underline underline-offset-4">
+                                        {item.name}
+                                    </Link>
+                                </li>
                             ))}
                         </ul>
                     </div>
 
-                    <div>
-                        <h4 className="mb-6 text-[11px] font-bold uppercase tracking-[0.2em] text-[#f1d055]">Help</h4>
-                        <ul className="space-y-3 text-sm text-[#dfeee9]">
-                            {['Contact Us', 'Shipping', 'Returns', 'Track Order', 'FAQ'].map((item) => (
-                                <li key={item}><Link to="/contact" className="transition hover:text-white">{item}</Link></li>
+                    {/* Quick Links: Customer Care */}
+                    <div className="lg:col-span-2">
+                        <h4 className="mb-6 text-xs font-bold uppercase tracking-[0.2em] text-[#f1d055]">
+                            Help
+                        </h4>
+                        <ul className="space-y-3.5 text-sm text-[#dfeee9]/80">
+                            {[
+                                { name: 'Contact Us', path: '/contact' },
+                                { name: 'Shipping Policy', path: '/shipping' },
+                                { name: 'Returns & Refunds', path: '/returns' },
+                                { name: 'Track Order', path: '/track' },
+                                { name: 'FAQs', path: '/faq' }
+                            ].map((item) => (
+                                <li key={item.name}>
+                                    <Link to={item.path} className="transition-colors hover:text-white hover:underline underline-offset-4">
+                                        {item.name}
+                                    </Link>
+                                </li>
                             ))}
                         </ul>
-                    </div>
+                    </div> 
 
-                    <div>
-                        <h4 className="mb-6 text-[11px] font-bold uppercase tracking-[0.2em] text-[#f1d055]">Reach</h4>
-                        <ul className="space-y-4 text-sm text-[#dfeee9]">
-                            <li className="flex items-start gap-3"><MapPin size={16} className="mt-1 text-[#f1d055]" /><span>22 Green Valley Road, Bengaluru, India</span></li>
-                            <li className="flex items-center gap-3"><Phone size={16} className="text-[#f1d055]" /><span>+91 98765 43210</span></li>
-                            <li className="flex items-center gap-3"><Mail size={16} className="text-[#f1d055]" /><span>hello@storyhoney.com</span></li>
+                    {/* Contact Details Column */}
+                    <div className="lg:col-span-4">
+                        <h4 className="mb-6 text-xs font-bold uppercase tracking-[0.2em] text-[#f1d055]">
+                            Get In Touch
+                        </h4>
+                        <ul className="space-y-4 text-sm text-[#dfeee9]/80">
+                            <li className="flex items-start gap-3">
+                                <MapPin size={18} className="mt-0.5 text-[#f1d055] shrink-0" />
+                                <span>At. VEDPACHMARHI AYURVEDIC PRIVATE LIMITED , Patansaongi, NH 47 , Nagpur- 441113, Maharashtra</span>
+                            </li>
+                            <li className="flex items-center gap-3">
+                                <Phone size={18} className="text-[#f1d055] shrink-0" />
+                                <a href="tel:+919876543210" className="hover:text-white transition-colors">
+                                    +91 98765 43210
+                                </a>
+                            </li>
+                            <li className="flex items-center gap-3">
+                                <Mail size={18} className="text-[#f1d055] shrink-0" />
+                                <a href="mailto:vedmanohar1@gmail.com" className="hover:text-white transition-colors">
+                                    vedmanohar1@gmail.com
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
 
-                <div className="flex flex-col gap-4 border-t border-white/10 pt-8 text-xs uppercase tracking-[0.2em] text-[#dfeee9] md:flex-row md:items-center md:justify-between">
-                    <p>© {new Date().getFullYear()} Story Honey. All rights reserved.</p>
-                    <div className="flex gap-5">
-                        <Link to="#">Privacy</Link>
-                        <Link to="#">Terms</Link>
-                        <Link to="#">Sitemap</Link>
+                {/* Bottom Bar Section */}
+                <div className="pt-8 flex flex-col gap-4 text-xs tracking-widest text-[#dfeee9]/70 md:flex-row md:items-center md:justify-between">
+                    <p>© {new Date().getFullYear()} {brandName} Honey. All rights reserved.</p>
+                    <div className="flex flex-wrap gap-6 text-[#dfeee9]/80 uppercase">
+                        <Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
+                        <Link to="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+                        <Link to="/sitemap" className="hover:text-white transition-colors">Sitemap</Link>
                     </div>
                 </div>
             </div>

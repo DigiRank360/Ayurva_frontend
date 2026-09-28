@@ -55,7 +55,9 @@ export default function Contact() {
                                     </div>
                                     <div>
                                         <h3 className="font-bold text-text-heading text-lg">Email Us</h3>
-                                        <p className="text-text-muted">lugavastra@gmail.com</p>
+                                        <a href="mailto:vedmanohar1@gmail.com" className="text-text-muted hover:text-accent-gold transition-colors">
+                                            vedmanohar1@gmail.com
+                                        </a>
                                     </div>
                                 </div>
                                 <div className="flex items-start gap-6">
@@ -64,8 +66,9 @@ export default function Contact() {
                                     </div>
                                     <div>
                                         <h3 className="font-bold text-text-heading text-lg">Call Us</h3>
-                                        <p className="text-text-muted">+91 7400980354</p>
-                                        <p className="text-text-muted">Mon - Sat, 10am - 7pm IST</p>
+                                        <a href="tel:+919876543210" className="text-text-muted hover:text-accent-gold transition-colors">
+                                            +91 98765 43210
+                                        </a>
                                     </div>
                                 </div>
                                 <div className="flex items-start gap-6">
@@ -74,9 +77,10 @@ export default function Contact() {
                                     </div>
                                     <div>
                                         <h3 className="font-bold text-text-heading text-lg">Visit Us</h3>
-                                        <p className="text-text-muted max-w-xs">
-                                            125, Rohit Nagar,<br />
-                                            Bhopal, Madhya Pradesh - 462001
+                                        <p className="text-text-muted max-w-xs break-words">
+                                            At. VEDPACHMARHI AYURVEDIC PRIVATE LIMITED,<br />
+                                            Patansaongi, NH 47,<br />
+                                            Nagpur - 441113, Maharashtra
                                         </p>
                                     </div>
                                 </div>

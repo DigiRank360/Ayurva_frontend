@@ -72,6 +72,7 @@ const Header = () => {
         // { name: 'Lehengas', path: '/shop?category=Lehengas' },
         // { name: 'Suits', path: '/shop?category=Suits' },
         { name: 'About', path: '/about' },
+        { name: 'Contact', path: '/contact' },
     ];
 
     return (

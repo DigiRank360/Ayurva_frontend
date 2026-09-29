@@ -7,7 +7,6 @@ import {
     MapPin, 
     Phone, 
     Mail, 
-    ArrowRight 
 } from 'lucide-react';
 
 // Default Logo import (aap custom path pass kar sakte hain ya prop se override kar sakte hain)
@@ -47,11 +46,13 @@ const Footer = ({
                     <div className="lg:col-span-4 space-y-6">
                         <Link to="/" className="inline-flex items-center gap-3 group">
                             {logoSrc ? (
-                                <img 
-                                    src={logoSrc} 
-                                    alt={`${brandName} Logo`} 
-                                    className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105" 
-                                />
+                                <span className="inline-flex items-center rounded-md border border-[#f1d055]/50 bg-[#f5f3ea] px-3 py-2 shadow-md transition-transform duration-300 group-hover:scale-[1.03]">
+                                    <img
+                                        src={logoSrc}
+                                        alt={`${brandName || 'Ayurva Pro'} Logo`}
+                                        className="h-11 w-auto max-w-[13rem] object-contain sm:h-12"
+                                    />
+                                </span>
                             ) : (
                                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#f1d055] text-sm font-black text-[#18312f] shadow-md">
                                     {brandName.charAt(0)}
@@ -94,8 +95,8 @@ const Footer = ({
                         <ul className="space-y-3.5 text-sm text-[#dfeee9]/80">
                             {[
                                 { name: 'About Us', path: '/about' },
-                                { name: 'New Arrivals', path: '/shop' },
-                                { name: 'Best Sellers', path: '/shop' },
+                                { name: 'New Arrivals', path: '/shop?sort=newest' },
+                                { name: 'Best Sellers', path: '/shop?sort=best-selling' },
                                 { name: 'Our Story', path: '/story' },
                                 { name: 'Gift Boxes', path: '/gifts' }
                             ].map((item) => (

@@ -17,7 +17,7 @@ export default function Login() {
                         <h1 className="font-sans font-bold text-3xl text-text-heading mb-2">Welcome Back</h1>
                         <p className="text-text-muted text-sm">
                             Sign in to access your luxury collection.
-                            <span className="block mt-1 italic text-accent-gold">"Parampara, Jo Mehsoos Ho"</span>
+                            <span className="block mt-1 italic text-accent-gold">"Ayurveda: The Science of Life"</span>
                         </p>
                     </div>
 
@@ -59,7 +59,7 @@ export default function Login() {
 
                     <div className="mt-8 pt-6 border-t border-border-light text-center">
                         <p className="text-sm text-text-muted">
-                            New to Luga Vastra?{' '}
+                            New to Ayurva Pro?{' '}
                             <Link to="/signup" className="text-text-heading font-bold hover:text-accent-gold transition-colors">
                                 Create an Account
                             </Link>

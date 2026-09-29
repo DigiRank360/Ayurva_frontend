@@ -108,7 +108,7 @@ const LoginModal = ({ isOpen, onClose, onOTPSent }) => {
 
                     {/* Terms */}
                     <p className="text-xs text-center text-gray-500 leading-relaxed">
-                        By continuing, you agree to Luga Vastra's{' '}
+                        By continuing, you agree to Ayurva Pro's{' '}
                         <a href="/terms" className="text-accent-gold hover:underline">Terms of Service</a>
                         {' '}and{' '}
                         <a href="/privacy" className="text-accent-gold hover:underline">Privacy Policy</a>

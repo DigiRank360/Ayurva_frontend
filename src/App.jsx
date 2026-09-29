@@ -21,6 +21,10 @@ import OrderConfirmation from './pages/OrderConfirmation';
 import ForgotPassword from './pages/ForgotPassword';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import GiftGuide from './pages/GiftGuide';
+import FAQ from './pages/FAQ';
+import LegalInformation from './pages/LegalInformation';
+import Sitemap from './pages/Sitemap';
 import ScrollToTop from '@/components/ui/ScrollToTop';
 
 const queryClient = new QueryClient();
@@ -93,7 +97,16 @@ function App() {
                   <Route path="/profile/edit-address/:id" element={<AddressForm />} />
                   <Route path="/order-confirmation" element={<OrderConfirmation />} />
                   <Route path="/about" element={<About />} />
+                  <Route path="/story" element={<About />} />
                   <Route path="/contact" element={<Contact />} />
+                  <Route path="/gifts" element={<GiftGuide />} />
+                  <Route path="/shipping" element={<LegalInformation />} />
+                  <Route path="/returns" element={<LegalInformation />} />
+                  <Route path="/track" element={<TrackOrder />} />
+                  <Route path="/faq" element={<FAQ />} />
+                  <Route path="/privacy-policy" element={<LegalInformation />} />
+                  <Route path="/terms" element={<LegalInformation />} />
+                  <Route path="/sitemap" element={<Sitemap />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </WishlistProvider>

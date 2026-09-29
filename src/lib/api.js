@@ -179,6 +179,11 @@ export const getOrderById = async (orderId) => {
     return response.data;
 };
 
+export const getOrderTracking = async (orderId) => {
+    const response = await api.get(`/shipping/track/${encodeURIComponent(orderId)}`);
+    return response.data;
+};
+
 export const updateOrderToPaid = async (orderId, paymentData) => {
     const response = await api.put(`/orders/${orderId}/pay`, paymentData);
     return response.data;

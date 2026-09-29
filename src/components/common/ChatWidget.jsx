@@ -1,14 +1,58 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, Send, User } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { MessageCircle, X, Send, Headset, ArrowUpRight, LoaderCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { submitContact } from '@/lib/api';
+
+const quickActions = [
+    { label: 'Track an order', value: 'track order' },
+    { label: 'Returns & refunds', value: 'returns' },
+    { label: 'Shipping details', value: 'shipping' },
+    { label: 'Contact support', value: 'contact support' },
+];
+
+const makeMessage = (text, isUser = false, link = null) => ({
+    id: `${Date.now()}-${Math.random()}`,
+    text,
+    isUser,
+    link,
+    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+});
+
+const getAssistantReply = (message) => {
+    const normalized = message.toLowerCase();
+    if (/track|tracking|delivery status|where.*order|order status/.test(normalized)) {
+        return { text: 'Enter your order ID on the tracking page to see the latest shipment status and tracking history.', link: { label: 'Track order', to: '/track' } };
+    }
+    if (/return|refund|exchange|damaged|wrong item/.test(normalized)) {
+        return { text: 'Return requests are available for delivered orders within 7 days of delivery. Sign in to your account to open your orders and submit a request.', link: { label: 'Returns information', to: '/returns' } };
+    }
+    if (/ship|delivery|deliver|courier|shipping/.test(normalized)) {
+        return { text: 'Delivery estimates and charges are shown at checkout for your address. Shipment updates and courier details appear on the tracking page after dispatch.', link: { label: 'Shipping information', to: '/shipping' } };
+    }
+    if (/payment|pay|cod|checkout|charge/.test(normalized)) {
+        return { text: 'Available payment methods and order charges are displayed during checkout. More answers are available in our FAQs.', link: { label: 'View FAQs', to: '/faq' } };
+    }
+    if (/product|ingredient|wellness|shop|catalog/.test(normalized)) {
+        return { text: 'Browse the current wellness collection to see available products, ingredients, and prices.', link: { label: 'Explore products', to: '/shop' } };
+    }
+    return null;
+};
 
 const ChatWidget = () => {
+    const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState([
-        { id: 1, text: "Hello! How can we help you today?", isUser: false, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
+        makeMessage('Hi! I can help with order tracking, shipping, returns, and product questions. Choose a topic or send a message.')
     ]);
     const [inputText, setInputText] = useState("");
+    const [contactFormOpen, setContactFormOpen] = useState(false);
+    const [contactDetails, setContactDetails] = useState({ name: '', email: '' });
+    const [pendingInquiry, setPendingInquiry] = useState('');
+    const [isSendingContact, setIsSendingContact] = useState(false);
+    const [contactError, setContactError] = useState('');
     const messagesEndRef = useRef(null);
+    const inputRef = useRef(null);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -18,89 +62,129 @@ const ChatWidget = () => {
         scrollToBottom();
     }, [messages]);
 
-    const handleSendMessage = (e) => {
-        e.preventDefault();
-        if (!inputText.trim()) return;
-
-        // Add user message
-        const newMessage = {
-            id: Date.now(),
-            text: inputText,
-            isUser: true,
-            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    useEffect(() => {
+        if (!isOpen) return undefined;
+        const handleKeyDown = (event) => {
+            if (event.key === 'Escape') setIsOpen(false);
         };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [isOpen]);
 
-        setMessages(prev => [...prev, newMessage]);
-        setInputText("");
+    const askAssistant = (text) => {
+        const trimmedText = text.trim();
+        if (!trimmedText) return;
 
-        // Simulate bot response
-        setTimeout(() => {
-            setMessages(prev => [...prev, {
-                id: Date.now() + 1,
-                text: "Thanks for reaching out! Our support team will get back to you shortly.",
-                isUser: false,
-                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-            }]);
-        }, 1000);
+        setMessages((current) => [...current, makeMessage(trimmedText, true)]);
+        setInputText('');
+        const reply = getAssistantReply(trimmedText);
+        if (reply) {
+            setMessages((current) => [...current, makeMessage(reply.text, false, reply.link)]);
+            setContactFormOpen(false);
+            setPendingInquiry('');
+            return;
+        }
+
+        setPendingInquiry(trimmedText);
+        setContactError('');
+        setContactFormOpen(true);
+        setMessages((current) => [...current, makeMessage('I do not have a verified answer for that yet. Leave your details below and I will send your question to our support team.')]);
+    };
+
+    const handleSendMessage = (event) => {
+        event.preventDefault();
+        askAssistant(inputText);
+    };
+
+    const handleContactSubmit = async (event) => {
+        event.preventDefault();
+        setIsSendingContact(true);
+        setContactError('');
+        try {
+            const response = await submitContact({
+                ...contactDetails,
+                message: `Support request from website chat: ${pendingInquiry || 'Customer requested support.'}`,
+            });
+            setMessages((current) => [...current, makeMessage(response.message || 'Your message has been sent to our support team.')]);
+            setContactDetails({ name: '', email: '' });
+            setPendingInquiry('');
+            setContactFormOpen(false);
+        } catch (error) {
+            setContactError(error.response?.data?.message || 'Could not send your request. Please try again or use the contact page.');
+        } finally {
+            setIsSendingContact(false);
+        }
     };
 
     return (
-        <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+        <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end sm:bottom-6 sm:right-6">
             {/* Chat Window */}
             <div className={cn(
-                "bg-white w-80 md:w-96 rounded-2xl shadow-2xl border border-border-light overflow-hidden transition-all duration-300 origin-bottom-right mb-4",
-                isOpen ? "scale-100 opacity-100 translate-y-0" : "scale-95 opacity-0 translate-y-10 pointer-events-none h-0 mb-0"
-            )}>
+                    "mb-4 flex h-[min(78dvh,42rem)] min-h-[min(24rem,calc(100dvh-8rem))] max-h-[calc(100dvh-6rem)] w-[calc(100vw-2rem)] max-w-[26rem] flex-col overflow-hidden rounded-xl border border-[#d8e2dc] bg-white shadow-[0_20px_60px_-16px_rgba(15,42,34,0.38)] transition-all duration-200 origin-bottom-right",
+                    isOpen ? "visible translate-y-0 scale-100 opacity-100" : "invisible pointer-events-none absolute translate-y-3 scale-[0.98] opacity-0"
+                )} role="dialog" aria-modal="false" aria-labelledby="support-chat-title" aria-hidden={!isOpen}>
                 {/* Header */}
-                <div className="bg-text-heading p-4 flex items-center justify-between">
+                    <div className="flex shrink-0 items-center justify-between bg-[#123f38] px-5 py-4 text-white">
                     <div className="flex items-center gap-3">
-                        <div className="relative">
-                            <div className="w-10 h-10 rounded-full bg-accent-gold/20 flex items-center justify-center border border-accent-gold text-accent-gold">
-                                <User size={20} />
-                            </div>
-                            <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-text-heading rounded-full"></span>
+                            <div className="flex h-11 w-11 items-center justify-center rounded-lg border border-white/20 bg-white/10 text-[#ead58c]">
+                                <Headset size={21} />
                         </div>
                         <div>
-                            <h3 className="font-bold text-white text-sm">Luga Vastra Support</h3>
-                            <p className="text-xs text-text-muted">Online</p>
+                                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#ead58c]">Ayurva Pro</p>
+                                <h3 id="support-chat-title" className="mt-0.5 text-base font-semibold leading-tight text-white">Help center</h3>
                         </div>
                     </div>
-                    <button onClick={() => setIsOpen(false)} className="text-text-muted hover:text-white transition-colors">
+                        <button type="button" aria-label="Close help chat" onClick={() => setIsOpen(false)} className="flex h-9 w-9 items-center justify-center rounded-md text-white/75 transition-colors hover:bg-white/10 hover:text-white">
                         <X size={20} />
                     </button>
                 </div>
 
                 {/* Messages Area */}
-                <div className="h-80 overflow-y-auto p-4 bg-bg-section space-y-4">
+                    <div aria-live="polite" className="min-h-0 flex-1 space-y-4 overflow-y-auto bg-[#f5f7f4] p-5">
                     {messages.map((msg) => (
-                        <div key={msg.id} className={cn("flex flex-col max-w-[80%]", msg.isUser ? "ml-auto items-end" : "items-start")}>
+                        <div key={msg.id} className={cn("flex max-w-[88%] flex-col", msg.isUser ? "ml-auto items-end" : "items-start")}>
                             <div className={cn(
-                                "px-4 py-2.5 rounded-2xl text-sm font-medium",
+                                "rounded-xl px-4 py-2.5 text-sm font-medium leading-relaxed",
                                 msg.isUser
-                                    ? "bg-accent-gold text-white rounded-tr-none"
-                                    : "bg-white border border-border-light text-text-heading rounded-tl-none"
+                                    ? "rounded-tr-sm bg-text-heading text-white"
+                                    : "rounded-tl-sm border border-border-light bg-white text-text-heading"
                             )}>
                                 {msg.text}
                             </div>
+                            {msg.link && <button type="button" onClick={() => { setIsOpen(false); navigate(msg.link.to); }} className="mt-2 inline-flex items-center gap-1 text-xs font-bold text-text-heading underline underline-offset-4 hover:text-accent-gold">{msg.link.label}<ArrowUpRight size={13} /></button>}
                             <span className="text-[10px] text-text-muted mt-1 px-1">{msg.time}</span>
                         </div>
                     ))}
+                    {!contactFormOpen && messages.length === 1 && <div className="space-y-2"><p className="text-[11px] font-semibold uppercase tracking-wider text-gray-500">Popular topics</p><div className="grid grid-cols-2 gap-2">{quickActions.map((action) => <button key={action.value} type="button" onClick={() => askAssistant(action.value)} className="min-h-11 rounded-md border border-[#d8e2dc] bg-white px-3 py-2 text-left text-xs font-semibold leading-snug text-[#24473c] transition-colors hover:border-[#b79a54] hover:bg-[#fbf8ef]">{action.label}</button>)}</div></div>}
                     <div ref={messagesEndRef} />
                 </div>
 
+                {contactFormOpen && <form onSubmit={handleContactSubmit} className="shrink-0 space-y-2 border-t border-[#e2e8e3] bg-white p-4">
+                    <input aria-label="Your name" autoComplete="name" required value={contactDetails.name} onChange={(event) => setContactDetails({ ...contactDetails, name: event.target.value })} placeholder="Your name" className="h-10 w-full rounded-md border border-border-default px-3 text-sm outline-none focus:border-accent-gold focus:ring-1 focus:ring-accent-gold" />
+                    <input aria-label="Your email" type="email" autoComplete="email" required value={contactDetails.email} onChange={(event) => setContactDetails({ ...contactDetails, email: event.target.value })} placeholder="Email address" className="h-10 w-full rounded-md border border-border-default px-3 text-sm outline-none focus:border-accent-gold focus:ring-1 focus:ring-accent-gold" />
+                    {contactError && <p role="alert" className="text-xs text-red-700">{contactError}</p>}
+                    <button type="submit" disabled={isSendingContact} className="flex h-10 w-full items-center justify-center gap-2 rounded-md bg-text-heading px-4 text-sm font-semibold text-white transition-colors hover:bg-accent-gold disabled:opacity-60">
+                        {isSendingContact ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <Send size={15} />}
+                        {isSendingContact ? 'Sending request...' : 'Send to support'}
+                    </button>
+                </form>}
+
                 {/* Input Area */}
-                <form onSubmit={handleSendMessage} className="p-3 bg-white border-t border-border-light flex gap-2">
+                <form onSubmit={handleSendMessage} className="flex shrink-0 gap-2 border-t border-[#e2e8e3] bg-white p-4">
                     <input
+                        ref={inputRef}
                         type="text"
                         value={inputText}
                         onChange={(e) => setInputText(e.target.value)}
-                        placeholder="Type a message..."
-                        className="flex-1 bg-bg-section border-transparent rounded-full px-4 text-sm focus:outline-none focus:ring-1 focus:ring-accent-gold"
+                        placeholder="Ask about an order or product..."
+                        aria-label="Type a question"
+                        className="h-11 min-w-0 flex-1 rounded-full border border-transparent bg-bg-section px-4 text-sm focus:outline-none focus:ring-1 focus:ring-accent-gold"
                     />
                     <button
+                        aria-label="Send message"
                         type="submit"
                         disabled={!inputText.trim()}
-                        className="w-10 h-10 rounded-full bg-text-heading text-white flex items-center justify-center hover:bg-accent-gold transition-colors disabled:opacity-50 disabled:hover:bg-text-heading"
+                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-text-heading text-white transition-colors hover:bg-accent-gold disabled:opacity-50 disabled:hover:bg-text-heading"
                     >
                         <Send size={16} />
                     </button>
@@ -109,10 +193,13 @@ const ChatWidget = () => {
 
             {/* Float Button */}
             <button
-                onClick={() => setIsOpen(!isOpen)}
+                type="button"
+                aria-label={isOpen ? 'Close help chat' : 'Open help chat'}
+                aria-expanded={isOpen}
+                onClick={() => { setIsOpen(!isOpen); if (!isOpen) window.setTimeout(() => inputRef.current?.focus(), 100); }}
                 className={cn(
-                    "w-14 h-14 rounded-full shadow-xl flex items-center justify-center transition-all duration-300 transform hover:scale-105 active:scale-95",
-                    isOpen ? "bg-white text-text-heading border border-border-light rotate-90" : "bg-text-heading text-white border-2 border-white"
+                    "flex h-14 w-14 items-center justify-center rounded-full shadow-xl transition-transform duration-200 hover:scale-105 active:scale-95",
+                    isOpen ? "border border-border-light bg-white text-text-heading" : "border-2 border-white bg-text-heading text-white"
                 )}
             >
                 {isOpen ? <X size={24} /> : <MessageCircle size={28} />}

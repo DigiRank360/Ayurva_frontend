@@ -55,16 +55,15 @@ const BannerSlider = () => {
 
     if (isLoading) {
         return (
-            <div className="h-[420px] w-full animate-pulse sm:h-[540px]" />
+            <div className="aspect-[4/3] w-full animate-pulse sm:aspect-auto sm:h-[540px]" />
         );
     }
 
     return (
-        <div className="relative h-[420px] w-full overflow-hidden sm:h-[540px]">
-            <div className="absolute inset-0 flex items-center justify-center">
-                <div className="absolute inset-0 " />
-            </div>
-
+        <div className={cn(
+            'relative aspect-[4/3] w-full overflow-hidden sm:aspect-auto sm:h-[540px]',
+            slides[current]?.mobileImageUrl && 'aspect-[4/5]'
+        )}>
             {slides.map((banner, index) => (
                 <div
                     key={banner._id || index}
@@ -73,12 +72,20 @@ const BannerSlider = () => {
                         index === current ? 'translate-x-0 opacity-100 z-10' : 'translate-x-10 opacity-0 -z-10 pointer-events-none'
                     )}
                 >
-                    <img
-                        src={getImageUrl(banner.imageUrl)}
-                        alt={banner.title || `Banner ${index + 1}`}
-                        className="h-full w-full object-contain"
-                        onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1589987607602-7d1f394f4a6d?auto=format&fit=crop&w=1800&q=80'; }}
-                    />
+                    <picture>
+                        {banner.mobileImageUrl && (
+                            <source
+                                media="(max-width: 639px)"
+                                srcSet={getImageUrl(banner.mobileImageUrl)}
+                            />
+                        )}
+                        <img
+                            src={getImageUrl(banner.imageUrl)}
+                            alt={banner.title || `Banner ${index + 1}`}
+                            className="h-full w-full object-cover"
+                            onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1589987607602-7d1f394f4a6d?auto=format&fit=crop&w=1800&q=80'; }}
+                        />
+                    </picture>
 
                     {/* <div className="absolute inset-0 bg-gradient-to-r from-[rgba(3,20,19,0.28)] via-[rgba(3,20,19,0.08)] to-[rgba(3,20,19,0.02)]" /> */}
 
@@ -86,24 +93,24 @@ const BannerSlider = () => {
                         <div className="mx-auto w-full max-w-[1320px] px-4 sm:px-6 lg:px-8">
                             <div className="max-w-[640px] text-white">
                                 {banner.subtitle && (
-                                    <span className="mb-5 inline-flex items-center rounded-full border border-[#173d3a]/20 bg-[#f5f0e4]/70 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.24em] text-[#173d3a] shadow-sm backdrop-blur-sm">
+                                    <span className="mb-3 inline-flex items-center rounded-full border border-[#173d3a]/20 bg-[#f5f0e4]/70 px-3 py-1 text-[9px] font-bold uppercase tracking-[0.18em] text-[#173d3a] shadow-sm backdrop-blur-sm sm:mb-5 sm:text-[10px] sm:tracking-[0.24em]">
                                         {banner.subtitle}
                                     </span>
                                 )}
 
                                 {banner.title && (
-                                    <h2 className="text-[3rem] font-bold leading-[0.96] tracking-[-0.07em] text-[#173d3a] sm:text-[4rem] md:text-[5.1rem] lg:text-[6rem]">
+                                    <h2 className="text-2xl font-bold leading-[1.05] text-[#173d3a] sm:text-[4rem] sm:leading-[0.98] md:text-[5.1rem] lg:text-[6rem]">
                                         {banner.title}
                                     </h2>
                                 )}
 
-                                <div className="mt-7 flex items-center gap-3">
+                                <div className="mt-3 flex flex-wrap items-center gap-2 sm:mt-7 sm:gap-3">
                                     <Link to={banner.link || '/shop'}
-                                        className="inline-flex items-center justify-center rounded-full bg-[#0f4f4d] px-7 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-white shadow-[0_18px_35px_rgba(15,79,77,0.28)] transition hover:bg-[#0b413f]"
+                                        className="inline-flex items-center justify-center rounded-full bg-[#0f4f4d] px-4 py-2.5 text-[9px] font-bold uppercase tracking-[0.16em] text-white shadow-[0_18px_35px_rgba(15,79,77,0.28)] transition hover:bg-[#0b413f] sm:px-7 sm:py-3 sm:text-[10px] sm:tracking-[0.2em]"
                                     >
                                         Shop Now
                                     </Link>
-                                    <button className="inline-flex items-center justify-center rounded-full border border-[#173d3a]/25 bg-[#f7f7f2]/70 px-7 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-[#173d3a] shadow-sm transition hover:bg-[#f0f0eb]">
+                                    <button className="inline-flex items-center justify-center rounded-full border border-[#173d3a]/25 bg-[#f7f7f2]/70 px-4 py-2.5 text-[9px] font-bold uppercase tracking-[0.16em] text-[#173d3a] shadow-sm transition hover:bg-[#f0f0eb] sm:px-7 sm:py-3 sm:text-[10px] sm:tracking-[0.2em]">
                                         Learn More
                                     </button>
                                 </div>

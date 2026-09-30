@@ -55,14 +55,14 @@ const BannerSlider = () => {
 
     if (isLoading) {
         return (
-            <div className="h-[420px] w-full animate-pulse bg-[#efe9cf] sm:h-[540px]" />
+            <div className="h-[420px] w-full animate-pulse sm:h-[540px]" />
         );
     }
 
     return (
-        <div className="relative h-[420px] w-full overflow-hidden bg-[#efe9cf] sm:h-[540px]">
+        <div className="relative h-[420px] w-full overflow-hidden sm:h-[540px]">
             <div className="absolute inset-0 flex items-center justify-center">
-                <div className="absolute inset-0 bg-[#dfe7b6] opacity-90" />
+                <div className="absolute inset-0 " />
             </div>
 
             {slides.map((banner, index) => (
@@ -76,11 +76,11 @@ const BannerSlider = () => {
                     <img
                         src={getImageUrl(banner.imageUrl)}
                         alt={banner.title || `Banner ${index + 1}`}
-                        className="h-full w-full object-cover"
+                        className="h-full w-full object-contain"
                         onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1589987607602-7d1f394f4a6d?auto=format&fit=crop&w=1800&q=80'; }}
                     />
 
-                    <div className="absolute inset-0 bg-gradient-to-r from-[rgba(3,20,19,0.28)] via-[rgba(3,20,19,0.08)] to-[rgba(3,20,19,0.02)]" />
+                    {/* <div className="absolute inset-0 bg-gradient-to-r from-[rgba(3,20,19,0.28)] via-[rgba(3,20,19,0.08)] to-[rgba(3,20,19,0.02)]" /> */}
 
                     <div className="absolute inset-0 z-20 flex items-center">
                         <div className="mx-auto w-full max-w-[1320px] px-4 sm:px-6 lg:px-8">

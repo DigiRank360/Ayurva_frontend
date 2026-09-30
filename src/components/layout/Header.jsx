@@ -68,9 +68,6 @@ const Header = () => {
     const navLinks = [
         { name: 'Home', path: '/' },
         { name: 'Shop', path: '/shop' },
-        // { name: 'Sarees', path: '/shop?category=Sarees' },
-        // { name: 'Lehengas', path: '/shop?category=Lehengas' },
-        // { name: 'Suits', path: '/shop?category=Suits' },
         { name: 'About', path: '/about' },
         { name: 'Contact', path: '/contact' },
     ];
@@ -81,8 +78,8 @@ const Header = () => {
                 className={cn(
                     "fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-in-out border-b",
                     isScrolled
-                        ? "bg-[#f7f4ee]/80 backdrop-blur-xl shadow-[0_10px_30px_rgba(8,29,30,0.12)] border-[#cfd8d1] py-2"
-                        : "bg-white/10 backdrop-blur-md border-white/20 py-2"
+                        ? "bg-[#f7f4ee]/80 backdrop-blur-xl shadow-[0_10px_30px_rgba(8,29,30,0.12)] border-[#cfd8d1] py-1.5"
+                        : "bg-white/10 backdrop-blur-md border-white/20 py-1.5"
                 )}
             >
                 <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -109,7 +106,7 @@ const Header = () => {
                         {/* Logo - Center/Left */}
                         <div className="flex-shrink-0 flex items-center justify-center md:justify-start flex-1 md:flex-none">
                             <Link to="/" className="flex items-center gap-2 group">
-                                <div className="relative aspect-[2112/744] w-[clamp(9rem,44vw,13rem)] flex-shrink-0 overflow-hidden bg-transparent transition-transform duration-300 group-hover:scale-[1.03] sm:w-52">
+                                <div className="relative aspect-[2112/744] w-[clamp(8.5rem,39vw,11rem)] flex-shrink-0 overflow-hidden bg-transparent transition-transform duration-300 group-hover:scale-[1.03] sm:w-48">
                                     <img src={logo} alt="Ayurva PRO" className="absolute inset-0 h-full w-full object-contain" />
                                 </div>
                             </Link>
@@ -141,7 +138,7 @@ const Header = () => {
                             <div className="hidden sm:block relative group">
                                 <input
                                     type="text"
-                                    placeholder="Search"
+                                    placeholder="Search Ayurvedic wellness"
                                     className="w-0 group-hover:w-48 focus:w-48 transition-all duration-300 border-b border-transparent focus:border-[#0d8a7c] outline-none text-sm bg-transparent placeholder-transparent group-hover:placeholder-gray-400 focus:placeholder-gray-400 pl-7 text-[#173d3a]"
                                 />
                                 <Search className="absolute left-0 top-1/2 -translate-y-1/2 text-[#173d3a] cursor-pointer hover:text-[#0d8a7c] transition-colors" size={20} />
@@ -199,7 +196,7 @@ const Header = () => {
                         <div className="relative">
                             <input
                                 type="text"
-                                placeholder="Search for sarees, lehengas, suits..."
+                                placeholder="Search Ayurvedic products, herbs, ingredients..."
                                 className="w-full px-4 py-3 pl-12 pr-4 rounded-lg border-2 border-accent-gold/30 focus:border-accent-gold outline-none text-sm bg-white shadow-sm"
                                 autoFocus={isSearchOpen}
                             />

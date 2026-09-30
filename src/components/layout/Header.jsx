@@ -109,7 +109,7 @@ const Header = () => {
                         {/* Logo - Center/Left */}
                         <div className="flex-shrink-0 flex items-center justify-center md:justify-start flex-1 md:flex-none">
                             <Link to="/" className="flex items-center gap-2 group">
-                                <div className="relative h-12 w-44 overflow-hidden bg-transparent transition-transform duration-300 group-hover:scale-[1.03] sm:h-14 sm:w-52">
+                                <div className="relative aspect-[2112/744] w-[clamp(9rem,44vw,13rem)] flex-shrink-0 overflow-hidden bg-transparent transition-transform duration-300 group-hover:scale-[1.03] sm:w-52">
                                     <img src={logo} alt="Ayurva PRO" className="absolute inset-0 h-full w-full object-contain" />
                                 </div>
                             </Link>
@@ -236,8 +236,8 @@ const Header = () => {
                         <div className="flex flex-col h-full bg-[#1A0F0F] text-white">
                             {/* Header of Drawer */}
                             <div className="p-6 flex justify-between items-center border-b border-white/10">
-                                <div className="relative h-14 w-48 overflow-hidden bg-transparent">
-                                    <img src={logo} alt="Ayurva PRO" className="absolute inset-0 h-full w-full object-contain" />
+                                <div className="flex aspect-[2112/744] w-52 items-center rounded-md border border-[#e4b52f] bg-[#f5f3ea] px-2 py-1 shadow-md">
+                                    <img src={logo} alt="Ayurva PRO" className="h-full w-full object-contain" />
                                 </div>
                                 <button
                                     onClick={() => setIsMobileMenuOpen(false)}

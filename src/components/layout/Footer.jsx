@@ -44,9 +44,9 @@ const Footer = ({
                     
                     {/* Brand Column */}
                     <div className="lg:col-span-4 space-y-6">
-                        <Link to="/" className="inline-flex items-center gap-3 group">
+                        <Link to="/" aria-label="Ayurva Pro home" className="inline-flex max-w-full items-center group">
                             {logoSrc ? (
-                                <span className="inline-flex items-center rounded-md border border-[#f1d055]/50 bg-[#f5f3ea] px-3 py-2 shadow-md transition-transform duration-300 group-hover:scale-[1.03]">
+                                <span className="inline-flex max-w-full items-center rounded-md border border-[#f1d055]/50 bg-[#f5f3ea] px-3 py-2 shadow-md transition-transform duration-300 group-hover:scale-[1.03]">
                                     <img
                                         src={logoSrc}
                                         alt={`${brandName || 'Ayurva Pro'} Logo`}
@@ -58,13 +58,11 @@ const Footer = ({
                                     {brandName.charAt(0)}
                                 </div>
                             )}
-                            <span className="text-2xl font-black tracking-widest text-white">
-                                {brandName}
-                            </span>
+                            {brandName && <span className="ml-3 text-2xl font-black tracking-widest text-white">{brandName}</span>}
                         </Link>
 
                         <p className="max-w-sm text-sm leading-relaxed text-[#dfeee9]/80 font-normal">
-                            Pure honey, natural wellness, and handcrafted goodness harvested directly for your everyday health and vitality.
+                             Natural wellness, and handcrafted goodness harvested directly for your everyday health and vitality.
                         </p>
 
                         {/* Social Icons Section */}
@@ -139,18 +137,18 @@ const Footer = ({
                         <ul className="space-y-4 text-sm text-[#dfeee9]/80">
                             <li className="flex items-start gap-3">
                                 <MapPin size={18} className="mt-0.5 text-[#f1d055] shrink-0" />
-                                <span>At. VEDPACHMARHI AYURVEDIC PRIVATE LIMITED , Patansaongi, NH 47 , Nagpur- 441113, Maharashtra</span>
+                                <span>At. VEDPACHMARHI AYURVEDIC PRIVATE LIMITED, NH 47 , Nagpur- 441113, Maharashtra</span>
                             </li>
                             <li className="flex items-center gap-3">
                                 <Phone size={18} className="text-[#f1d055] shrink-0" />
-                                <a href="tel:+919876543210" className="hover:text-white transition-colors">
-                                    +91 98765 43210
+                                <a href="tel:+918517036155" className="hover:text-white transition-colors">
+                                     +91 85170 36155
                                 </a>
                             </li>
                             <li className="flex items-center gap-3">
                                 <Mail size={18} className="text-[#f1d055] shrink-0" />
-                                <a href="mailto:vedmanohar1@gmail.com" className="hover:text-white transition-colors">
-                                    vedmanohar1@gmail.com
+                                <a href="mailto:support@ayuvapro.com" className="hover:text-white transition-colors">
+                                    support@ayuvapro.com
                                 </a>
                             </li>
                         </ul>
@@ -159,7 +157,7 @@ const Footer = ({
 
                 {/* Bottom Bar Section */}
                 <div className="pt-8 flex flex-col gap-4 text-xs tracking-widest text-[#dfeee9]/70 md:flex-row md:items-center md:justify-between">
-                    <p>© {new Date().getFullYear()} {brandName} Honey. All rights reserved.</p>
+                    <p>© {new Date().getFullYear()} {brandName}. All rights reserved.</p>
                     <div className="flex flex-wrap gap-6 text-[#dfeee9]/80 uppercase">
                         <Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
                         <Link to="/terms" className="hover:text-white transition-colors">Terms of Service</Link>

@@ -5,28 +5,23 @@ import { cn } from '@/lib/utils';
 import { getBanners } from '@/lib/api';
 import { getImageUrl } from '@/lib/utils';
 import useAsync from '@/hooks/useAsync';
+import ashwagandhaImg from '@/assets/banners/ashwagandha.png';
+import turmericImg from '@/assets/banners/turmeric.png';
+import tulsiImg from '@/assets/banners/tulsi.png';
 
 const defaultSlides = [
     {
         _id: 'slide-1',
-        title: 'Organic Honey For Healthy Living',
-        subtitle: 'Premium organic honey',
-        imageUrl: 'https://images.unsplash.com/photo-1589987607602-7d1f394f4a6d?auto=format&fit=crop&w=1800&q=80',
-        link: '/shop',
+        imageUrl: ashwagandhaImg,
+     
     },
     {
         _id: 'slide-2',
-        title: 'Pure Honey, Better Wellness',
-        subtitle: 'Freshly harvested',
-        imageUrl: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=1800&q=80',
-        link: '/shop',
+        imageUrl: turmericImg,
     },
     {
         _id: 'slide-3',
-        title: 'Golden Drops of Nature',
-        subtitle: '100% natural goodness',
-        imageUrl: 'https://images.unsplash.com/photo-1464226184884-fa52ac7d9b90?auto=format&fit=crop&w=1800&q=80',
-        link: '/shop',
+        imageUrl: tulsiImg,
     },
 ];
 
@@ -87,19 +82,19 @@ const BannerSlider = () => {
                         />
                     </picture>
 
-                    {/* <div className="absolute inset-0 bg-gradient-to-r from-[rgba(3,20,19,0.28)] via-[rgba(3,20,19,0.08)] to-[rgba(3,20,19,0.02)]" /> */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-[rgba(3,20,19,0.65)] via-[rgba(3,20,19,0.35)] to-[rgba(3,20,19,0.1)]" />
 
                     <div className="absolute inset-0 z-20 flex items-center">
                         <div className="mx-auto w-full max-w-[1320px] px-4 sm:px-6 lg:px-8">
                             <div className="max-w-[640px] text-white">
                                 {banner.subtitle && (
-                                    <span className="mb-3 inline-flex items-center rounded-full border border-[#173d3a]/20 bg-[#f5f0e4]/70 px-3 py-1 text-[9px] font-bold uppercase tracking-[0.18em] text-[#173d3a] shadow-sm backdrop-blur-sm sm:mb-5 sm:text-[10px] sm:tracking-[0.24em]">
+                                    <span className="mb-3 inline-flex items-center rounded-full border border-white/40 bg-white/15 px-3 py-1 text-[9px] font-bold uppercase tracking-[0.18em] text-white shadow-sm backdrop-blur-sm sm:mb-5 sm:text-[10px] sm:tracking-[0.24em]">
                                         {banner.subtitle}
                                     </span>
                                 )}
 
                                 {banner.title && (
-                                    <h2 className="text-2xl font-bold leading-[1.05] text-[#173d3a] sm:text-[4rem] sm:leading-[0.98] md:text-[5.1rem] lg:text-[6rem]">
+                                    <h2 className="text-2xl font-bold leading-[1.05] text-white sm:text-[4rem] sm:leading-[0.98] md:text-[5.1rem] lg:text-[6rem]">
                                         {banner.title}
                                     </h2>
                                 )}
@@ -110,7 +105,7 @@ const BannerSlider = () => {
                                     >
                                         Shop Now
                                     </Link>
-                                    <button className="inline-flex items-center justify-center rounded-full border border-[#173d3a]/25 bg-[#f7f7f2]/70 px-4 py-2.5 text-[9px] font-bold uppercase tracking-[0.16em] text-[#173d3a] shadow-sm transition hover:bg-[#f0f0eb] sm:px-7 sm:py-3 sm:text-[10px] sm:tracking-[0.2em]">
+                                    <button className="inline-flex items-center justify-center rounded-full border border-white/60 bg-white/10 px-4 py-2.5 text-[9px] font-bold uppercase tracking-[0.16em] text-white shadow-sm backdrop-blur-sm transition hover:bg-white/20 sm:px-7 sm:py-3 sm:text-[10px] sm:tracking-[0.2em]">
                                         Learn More
                                     </button>
                                 </div>
@@ -143,7 +138,7 @@ const BannerSlider = () => {
                                 onClick={() => setCurrent(idx)}
                                 className={cn(
                                     'h-2 rounded-full transition-all duration-300',
-                                    idx === current ? 'w-8 bg-[#173d3a]' : 'w-2 bg-[#173d3a]/35'
+                                    idx === current ? 'w-8 bg-white' : 'w-2 bg-white/50'
                                 )}
                             />
                         ))}

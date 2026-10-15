@@ -26,6 +26,11 @@ export const getImageUrl = (imagePath) => {
         return imagePath;
     }
 
+    // Bundled frontend assets (Vite imports) must not be prefixed with the API base
+    if (/^(data:|blob:|\/src\/|\/assets\/|\/@fs\/)/.test(imagePath)) {
+        return imagePath;
+    }
+
     // Otherwise, construct URL with API base (remove /api from end)
     const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
     const BASE_URL = API_BASE.replace('/api', '');

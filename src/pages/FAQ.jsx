@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
+import useSeo from '@/hooks/useSeo';
 import PageHero from '@/components/ui/PageHero';
 import Accordion from '@/components/ui/Accordion';
 
@@ -14,6 +15,11 @@ const questions = [
 ];
 
 export default function FAQ() {
+    useSeo({
+        title: 'Frequently Asked Questions | AyuvaPro',
+        description: 'Answers about AyuvaPro product information, orders, delivery and support.',
+        path: '/faq',
+    });
     return (
         <Layout>
             <PageHero title="Frequently Asked Questions" subtitle="Quick answers about orders, delivery, and returns." backgroundImage="https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=1800&q=85" currentPage="FAQs" />

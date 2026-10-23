@@ -192,18 +192,40 @@ const ChatWidget = () => {
             </div>
 
             {/* Float Button */}
-            <button
-                type="button"
-                aria-label={isOpen ? 'Close help chat' : 'Open help chat'}
-                aria-expanded={isOpen}
-                onClick={() => { setIsOpen(!isOpen); if (!isOpen) window.setTimeout(() => inputRef.current?.focus(), 100); }}
-                className={cn(
-                    "flex h-14 w-14 items-center justify-center rounded-full shadow-xl transition-transform duration-200 hover:scale-105 active:scale-95",
-                    isOpen ? "border border-border-light bg-white text-text-heading" : "border-2 border-white bg-text-heading text-white"
+            <div className="flex items-center gap-3">
+                {!isOpen && (
+                    <button
+                        type="button"
+                        tabIndex={-1}
+                        aria-hidden="true"
+                        onClick={() => { setIsOpen(true); window.setTimeout(() => inputRef.current?.focus(), 100); }}
+                        className="hidden items-center gap-2 rounded-full border border-[#e5c27f]/60 bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-text-heading shadow-lg transition hover:bg-[#fbf8ef] sm:inline-flex"
+                    >
+                        <span className="relative flex h-2 w-2">
+                            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#946000] opacity-60" />
+                            <span className="relative inline-flex h-2 w-2 rounded-full bg-[#946000]" />
+                        </span>
+                        Help &amp; Support
+                    </button>
                 )}
-            >
-                {isOpen ? <X size={24} /> : <MessageCircle size={28} />}
-            </button>
+                <button
+                    type="button"
+                    aria-label={isOpen ? 'Close help chat' : 'Open help and support chat'}
+                    aria-expanded={isOpen}
+                    onClick={() => { setIsOpen(!isOpen); if (!isOpen) window.setTimeout(() => inputRef.current?.focus(), 100); }}
+                    className={cn(
+                        "relative flex h-14 w-14 items-center justify-center rounded-full shadow-xl transition-transform duration-200 hover:scale-105 active:scale-95",
+                        isOpen ? "border border-border-light bg-white text-text-heading" : "border-2 border-white bg-text-heading text-white"
+                    )}
+                >
+                    {isOpen ? <X size={24} /> : <MessageCircle size={28} />}
+                    {!isOpen && (
+                        <span className="absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-[#946000] text-white" aria-hidden="true">
+                            <Headset size={12} />
+                        </span>
+                    )}
+                </button>
+            </div>
         </div>
     );
 };

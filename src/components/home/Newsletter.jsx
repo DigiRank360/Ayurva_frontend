@@ -47,11 +47,11 @@ const Newsletter = () => {
                 </span>
 
                 <h2 className="text-3xl md:text-5xl font-sans font-bold text-white mb-6 leading-tight max-w-2xl mx-auto">
-                    Bring More Wellness Into Your Day
+                    Stay Informed About AyuvaPro
                 </h2>
 
                 <p className="text-gray-300 text-base md:text-lg mb-10 font-light max-w-xl mx-auto leading-relaxed">
-                    Get practical Ayurvedic tips, mindful routines, and early access to natural wellness essentials. Start your journey with <span className="text-accent-gold font-medium">10% OFF</span> your first purchase.
+                    Get updates about AyuvaPro products, product information and store news.
                 </p>
 
                 <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 sm:gap-0 max-w-lg mx-auto sm:bg-white/10 sm:p-1.5 sm:rounded-full sm:border sm:border-white/10 sm:backdrop-blur-md sm:shadow-2xl bg-transparent p-0 border-none shadow-none rounded-none">

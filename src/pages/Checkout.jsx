@@ -263,7 +263,7 @@ export default function Checkout() {
             key: import.meta.env.VITE_RAZORPAY_KEY_ID,
             amount: razorpayOrder.amount,
             currency: razorpayOrder.currency,
-            name: 'Luga Vastra',
+            name: 'AyuvaPro',
             description: `Order Payment - ${cartItems.length} item(s)`,
             order_id: razorpayOrder.id,
             handler: async function (response) {

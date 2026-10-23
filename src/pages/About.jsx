@@ -1,37 +1,44 @@
 import React from 'react';
 import Layout from '@/components/layout/Layout';
+import useSeo from '@/hooks/useSeo';
 import { ArrowRight, Heart, Leaf, Star, Globe, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import aboutHero from '@/assets/about-hero.png';
 
 export default function About() {
+    useSeo({
+        title: 'About AyuvaPro | Our Brand & Approach',
+        description: 'Learn about AyuvaPro’s approach to Ayurvedic wellness: clear product details, ingredient information, usage directions and transparent purchase terms.',
+        path: '/about',
+    });
     const values = [
         {
             icon: Leaf,
-            title: 'Natural Ingredients',
-            description: 'Carefully selected botanicals and nourishing ingredients for everyday wellness'
+            title: 'Ingredient Clarity',
+            description: 'Ingredient lists with common and botanical names are shown on each product page.'
         },
         {
             icon: ShieldCheck,
-            title: 'Trusted Quality',
-            description: 'Thoughtfully made products with clear ingredients and consistent standards'
+            title: 'Product Information',
+            description: 'Pack size, directions for use and product-specific precautions presented clearly.'
         },
         {
             icon: Heart,
-            title: 'Daily Balance',
-            description: 'Simple Ayurvedic rituals designed to support a healthier, more balanced routine'
+            title: 'Accessible Support',
+            description: 'A support team for product details, orders and website policies.'
         },
         {
             icon: Globe,
-            title: 'Sustainability',
-            description: 'Responsible sourcing and mindful choices that care for people and the planet'
+            title: 'Transparent Terms',
+            description: 'Pricing, delivery, return and order terms available before you place an order.'
         }
     ];
 
     const stats = [
-        { number: '25+', label: 'Years of Wisdom' },
-        { number: '100%', label: 'Natural Care' },
-        { number: '10K+', label: 'Wellness Families' },
-        { number: '24/7', label: 'Everyday Support' }
+        { number: '01', label: 'Clear Product Details' },
+        { number: '02', label: 'Curated Combo Packages' },
+        { number: '03', label: 'Transparent Order Terms' },
+        { number: '04', label: 'Customer Support' }
     ];
 
     return (
@@ -39,8 +46,8 @@ export default function About() {
             {/* Hero Section */}
             <div className="relative h-[60vh] md:h-[70vh] lg:h-[80vh] w-full overflow-hidden">
                 <img
-                    src="https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&fit=crop&w=2000&q=85"
-                    alt="Natural Ayurvedic ingredients"
+                    src={aboutHero}
+                    alt="Ayurvedic mortar and pestle with natural ingredients"
                     className="absolute inset-0 h-full w-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-br from-[#173d3a]/85 via-[#173d3a]/55 to-[#b58b45]/35"></div>
@@ -48,14 +55,14 @@ export default function About() {
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
                     <div className="max-w-4xl">
                         <span className="text-accent-gold font-bold uppercase tracking-[0.3em] text-xs md:text-sm mb-4 md:mb-6 block animate-in fade-in slide-in-from-bottom-4 duration-700">
-                            Rooted in Ayurveda
+                            Our Approach
                         </span>
                         <h1 className="text-4xl md:text-6xl lg:text-7xl font-serif text-white mb-4 md:mb-6 leading-tight animate-in fade-in slide-in-from-bottom-6 duration-700 delay-200">
-                            Ancient wisdom<br />
-                            <span className="italic font-light text-accent-gold">for modern wellness</span>
+                            AyuvaPro:<br />
+                            <span className="italic font-light text-accent-gold">Our Approach to Ayurvedic Wellness</span>
                         </h1>
                         <p className="text-gray-100 text-sm md:text-lg max-w-2xl mx-auto font-light leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300">
-                            Thoughtfully made Ayurvedic essentials to help you feel balanced, nourished, and connected to natural living
+                            Wellness products and curated packages, presented with clear product details and purchase terms.
                         </p>
                     </div>
                 </div>
@@ -75,20 +82,20 @@ export default function About() {
                         {/* Text Content */}
                         <div className="order-2 lg:order-1">
                             <span className="text-accent-gold font-bold uppercase tracking-widest text-xs md:text-sm mb-3 md:mb-4 block">
-                                Our Philosophy
+                                Who We Are
                             </span>
                             <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif mb-4 md:mb-6 text-text-heading leading-tight">
-                                Wellness rooted in <span className="italic text-accent-gold">nature</span>
+                                Helping you make <span className="italic text-accent-gold">informed choices</span>
                             </h2>
                             <p className="text-text-body text-sm md:text-base leading-relaxed mb-4 md:mb-6">
-                                Ayurva Pro began with a simple belief: everyday wellness should feel natural, practical, and connected to the wisdom of Ayurveda.
+                                AyuvaPro brings together a portfolio of wellness products and curated product packages. We aim to help customers make informed choices by presenting product details, ingredients, usage information and purchase terms clearly.
                             </p>
                             <p className="text-text-body text-sm md:text-base leading-relaxed mb-4 md:mb-6">
-                                We bring together carefully chosen herbs, nourishing ingredients, and modern quality standards to create products that fit beautifully into real daily routines.
+                                Our company story, manufacturing and quality processes, and professional credentials will be shared here once verified.
                             </p>
-                            <p className="text-text-muted text-sm md:text-base leading-relaxed italic">
-                                "Wellness is not a quick fix; it is the small, natural choices we make every day."
-                            </p>
+                            <Link to="/shop" className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-accent-gold hover:underline">
+                                Shop products <ArrowRight size={16} />
+                            </Link>
                         </div>
 
                         {/* Image Collage */}
@@ -124,13 +131,13 @@ export default function About() {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20 lg:py-24">
                     <div className="text-center mb-12 md:mb-16">
                         <span className="text-accent-gold font-bold uppercase tracking-widest text-xs md:text-sm mb-3 md:mb-4 block">
-                            What Guides Us
+                            What We Focus On
                         </span>
                         <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif text-text-heading mb-4">
-                            Our Core Values
+                            Our Commitments
                         </h2>
                         <p className="text-text-muted text-sm md:text-base max-w-2xl mx-auto">
-                            Every product we create is guided by these principles of conscious, everyday wellness
+                            The service standards we aim to follow as we present every product and package
                         </p>
                     </div>
 
@@ -167,9 +174,9 @@ export default function About() {
                         <Leaf className="text-accent-gold mx-auto mb-6 md:mb-8" size={32} />
 
                         <h2 className="text-2xl md:text-4xl lg:text-5xl font-serif text-text-heading leading-tight md:leading-snug mb-6 md:mb-8">
-                            True wellness is built in the everyday.<br />
-                            It is about <span className="text-accent-gold italic">Balance</span>, <span className="text-accent-gold italic">Care</span>, and <span className="text-accent-gold italic">Consistency</span><br />
-                            woven into every ritual.
+                            Clear information.<br />
+                            Careful <span className="text-accent-gold italic">choices</span>.<br />
+                            Read the <span className="text-accent-gold italic">label</span> before use.
                         </h2>
 
                         <div className="flex items-center justify-center gap-4 opacity-40">
@@ -187,20 +194,20 @@ export default function About() {
 
                         <div className="relative z-10">
                             <span className="text-accent-gold font-bold uppercase tracking-widest text-xs md:text-sm mb-4 md:mb-6 block">
-                                Begin Your Wellness Ritual
+                                Explore AyuvaPro
                             </span>
                             <h2 className="text-3xl md:text-5xl text-white lg:text-6xl font-serif mb-4 md:mb-6 leading-tight">
-                                Nature jo mehsoos ho
+                                Review products before you order
                             </h2>
                             <p className="text-gray-300 text-sm md:text-lg mb-8 md:mb-12 max-w-2xl mx-auto">
-                                Explore natural Ayurvedic essentials created to bring more balance, nourishment, and intention to your day
+                                Explore ingredient lists, pack details, directions and purchase terms on each product page.
                             </p>
 
                             <Link
                                 to="/shop"
                                 className="group inline-flex items-center gap-3 bg-accent-gold text-text-heading px-6 md:px-10 py-3 md:py-4 rounded-lg font-bold uppercase tracking-wider text-xs md:text-sm hover:bg-accent-gold/90 transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-1"
                             >
-                                <span>Explore Wellness</span>
+                                <span>Shop Products</span>
                                 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                             </Link>
                         </div>

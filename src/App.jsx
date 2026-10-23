@@ -7,6 +7,8 @@ import { WishlistProvider } from './context/WishlistContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import Home from './pages/Home';
 import Shop from './pages/Shop';
+import ComboPackages from './pages/ComboPackages';
+import ReferAndEarn from './pages/ReferAndEarn';
 import ProductDetails from './pages/ProductDetails';
 import Checkout from './pages/Checkout';
 import Login from './pages/Login';
@@ -66,6 +68,8 @@ function App() {
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route path="/shop" element={<Shop />} />
+                  <Route path="/combo-packages" element={<ComboPackages />} />
+                  <Route path="/refer-and-earn" element={<ReferAndEarn />} />
                   <Route path="/product/:id" element={<ProductDetails />} />
                   <Route path="/checkout" element={
                     <ProtectedRoute>

@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import PageHero from '@/components/ui/PageHero';
+import shopHero from '@/assets/shop-hero.png';
 import { SlidersHorizontal, X, Loader2 } from 'lucide-react';
 import Layout from '@/components/layout/Layout';
+import useSeo from '@/hooks/useSeo';
 import ProductCard from '@/components/products/ProductCard';
 import FilterSidebar, { FilterDrawer } from '@/components/shop/FilterSidebar';
 import useShopFilters from '@/hooks/useShopFilters';
@@ -48,6 +50,11 @@ const generateDynamicRanges = (min, max) => {
 };
 
 export default function Shop() {
+    useSeo({
+        title: 'Shop Ayurvedic Wellness Products | AyuvaPro',
+        description: 'Browse AyuvaPro wellness products with ingredient lists, pack sizes, directions, pricing and delivery details on every product page.',
+        path: '/shop',
+    });
     const {
         activeCategory,
         setActiveCategory,
@@ -143,7 +150,7 @@ export default function Shop() {
             <PageHero
                 title="The Wellness Collection"
                 subtitle="Thoughtfully made Ayurvedic essentials for everyday balance."
-                backgroundImage="https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&fit=crop&w=1800&q=85"
+                backgroundImage={shopHero}
                 currentPage="Shop"
             />
 

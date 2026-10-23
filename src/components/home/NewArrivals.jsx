@@ -39,8 +39,8 @@ const NewArrivals = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex flex-row justify-between items-end mb-10">
                     <SectionHeading
-                        title="New Arrivals"
-                        subtitle="Fresh from the loom. Discover our latest masterpieces."
+                        title="Shop All Products"
+                        subtitle="Browse individual products and curated packages. Review each product’s ingredients, pack size, directions and important usage information before ordering."
                         className="mb-0 text-left"
                         centered={false}
                     />

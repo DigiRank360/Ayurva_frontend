@@ -55,6 +55,24 @@ export const getProducts = async (params = {}) => {
     return response.data;
 };
 
+export const getAllActiveProducts = async () => {
+    const firstPage = await getProducts({ active: true, limit: 100, page: 1 });
+    if (!Array.isArray(firstPage.products) || !Number.isFinite(firstPage.pages)) {
+        throw new Error('The product catalogue response is invalid.');
+    }
+
+    const products = [...firstPage.products];
+    for (let page = 2; page <= firstPage.pages; page += 1) {
+        const response = await getProducts({ active: true, limit: 100, page });
+        if (!Array.isArray(response.products)) {
+            throw new Error(`The product catalogue response for page ${page} is invalid.`);
+        }
+        products.push(...response.products);
+    }
+
+    return products;
+};
+
 // get product by id
 export const getProductById = async (id) => {
     const response = await api.get(`/products/${id}`);

@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
 import Layout from '@/components/layout/Layout';
+import useSeo from '@/hooks/useSeo';
 import PageHero from '@/components/ui/PageHero';
-import { Mail, Phone, MapPin, Send, User, MessageSquare } from 'lucide-react';
+import { Mail, MapPin, Send, User, MessageSquare } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import useLoading from '@/hooks/useLoading';
 import { submitContact } from '@/lib/api';
 import toast from 'react-hot-toast';
 
 export default function Contact() {
+    useSeo({
+        title: 'Contact AyuvaPro Support | We’re Here to Help',
+        description: 'Contact the AyuvaPro team for product information, order support or questions about website policies.',
+        path: '/contact',
+    });
     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
     const { isLoading, startLoading, stopLoading } = useLoading();
 
@@ -27,8 +33,8 @@ export default function Contact() {
     return (
         <Layout>
             <PageHero
-                title="Contact Us"
-                subtitle="We'd love to hear from you."
+                title="Contact & Support"
+                subtitle="We’re here to help."
                 backgroundImage="https://images.unsplash.com/photo-1596524430615-b46475ddff6e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                 currentPage="Contact"
             />
@@ -40,12 +46,12 @@ export default function Contact() {
 
                         {/* Contact Info */}
                         <div>
-                            <span className="text-accent-gold font-bold uppercase tracking-widest text-sm mb-4 block">Get in Touch</span>
+                            <span className="text-accent-gold font-bold uppercase tracking-widest text-sm mb-4 block">Customer Support</span>
                             <h2 className="text-3xl md:text-5xl font-sans font-bold text-text-heading mb-8 leading-tight">
-                                Let's Start a <br /><span className="text-accent-gold">Conversation</span>.
+                                We’re Here <br /><span className="text-accent-gold">to Help</span>.
                             </h2>
                             <p className="text-text-muted text-lg mb-12">
-                                Whether you have questions about our collections, need help with sizing, or just want to say hello, our team is here for you.
+                                For product information, order support or questions about website policies, contact the AyuvaPro team. Please include your order number when contacting us about an existing order.
                             </p>
 
                             <div className="space-y-8">
@@ -54,20 +60,9 @@ export default function Contact() {
                                         <Mail size={20} />
                                     </div>
                                     <div>
-                                        <h3 className="font-bold text-text-heading text-lg">Email Us</h3>
-                                        <a href="mailto:vedmanohar1@gmail.com" className="text-text-muted hover:text-accent-gold transition-colors">
-                                            vedmanohar1@gmail.com
-                                        </a>
-                                    </div>
-                                </div>
-                                <div className="flex items-start gap-6">
-                                    <div className="w-12 h-12 rounded-full bg-white shadow-soft flex items-center justify-center text-accent-gold shrink-0">
-                                        <Phone size={20} />
-                                    </div>
-                                    <div>
-                                        <h3 className="font-bold text-text-heading text-lg">Call Us</h3>
-                                        <a href="tel:+919876543210" className="text-text-muted hover:text-accent-gold transition-colors">
-                                            +91 98765 43210
+                                        <h3 className="font-bold text-text-heading text-lg">Email Support</h3>
+                                        <a href="mailto:Support@ayuvapro.com" className="text-text-muted hover:text-accent-gold transition-colors">
+                                            Support@ayuvapro.com
                                         </a>
                                     </div>
                                 </div>
@@ -76,7 +71,7 @@ export default function Contact() {
                                         <MapPin size={20} />
                                     </div>
                                     <div>
-                                        <h3 className="font-bold text-text-heading text-lg">Visit Us</h3>
+                                        <h3 className="font-bold text-text-heading text-lg">Registered Address</h3>
                                         <p className="text-text-muted max-w-xs break-words">
                                             At. VEDPACHMARHI AYURVEDIC PRIVATE LIMITED,<br />
                                             Patansaongi, NH 47,<br />
@@ -91,7 +86,8 @@ export default function Contact() {
                         <div className="bg-white p-8 md:p-12 rounded-3xl shadow-xl border border-border-light relative overflow-hidden">
                             <div className="absolute top-0 right-0 w-32 h-32 bg-accent-gold/10 rounded-bl-full -mr-8 -mt-8" />
 
-                            <h3 className="text-2xl font-bold text-text-heading mb-8">Send a Message</h3>
+                            <h3 className="text-2xl font-bold text-text-heading mb-2">Send a Message</h3>
+                            <p className="text-sm text-text-muted mb-8">Include your order number if your question is about an existing order.</p>
 
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -133,7 +129,7 @@ export default function Contact() {
                                             onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                                             rows={5}
                                             className="w-full pl-10 bg-bg-section border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-accent-gold transition-colors resize-none"
-                                            placeholder="How can we help?"
+                                            placeholder="How can we help? Add your order number if applicable."
                                             required
                                         />
                                     </div>

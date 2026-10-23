@@ -39,8 +39,8 @@ const CategoryGrid = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 md:mb-12">
                     <SectionHeading
-                        title="Shop by Category"
-                        subtitle="Explore our handcrafted collections designed for your every need."
+                        title="Find the Products That Fit Your Needs"
+                        subtitle="Browse individual products and curated packages. Review ingredients, pack size, directions and important usage information before ordering."
                         className="mb-0 text-left"
                         centered={false}
                     />

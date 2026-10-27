@@ -42,14 +42,14 @@ const UserMenu = () => {
             {/* Trigger Button */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center gap-1 sm:gap-2 px-1 sm:px-3 py-2 rounded-lg hover:bg-bg-section transition-colors"
+                className="flex items-center gap-1 sm:gap-2 px-0.5 sm:px-2 py-1.5 rounded-lg max-w-full hover:bg-bg-section transition-colors"
             >
                 <div className="w-8 h-8 bg-accent-gold rounded-full flex items-center justify-center flex-shrink-0">
                     <User size={18} className="text-text-heading" />
                 </div>
-                <div className="hidden lg:flex flex-col items-start">
-                    <span className="text-xs text-text-muted">Hello,</span>
-                    <span className="text-sm font-medium text-text-heading whitespace-nowrap">
+                <div className="hidden 2xl:flex flex-col items-start min-w-0 max-w-[9rem] leading-tight">
+                    <span className="text-[11px] text-text-muted">Hello,</span>
+                    <span className="text-sm font-medium text-text-heading truncate max-w-full">
                         {user?.name || user?.phone?.slice(-4)}
                     </span>
                 </div>
@@ -62,11 +62,11 @@ const UserMenu = () => {
 
             {/* Dropdown Menu */}
             {isOpen && (
-                <div className="absolute right-0 top-full mt-2 w-64 sm:w-56 bg-white rounded-xl shadow-2xl border border-gray-100 py-2 z-50 animate-[fadeIn_0.2s_ease-out]">
+                <div className="absolute right-0 top-full mt-2 w-[min(16rem,calc(100vw-2rem))] sm:w-56 bg-white rounded-xl shadow-2xl border border-gray-100 py-2 z-50 animate-[fadeIn_0.2s_ease-out]">
                     {/* User Info */}
                     <div className="px-4 py-3 border-b border-gray-100">
                         <p className="text-sm font-medium text-text-heading truncate">{user?.name}</p>
-                        <p className="text-xs text-text-muted">{user?.phone}</p>
+                        <p className="text-xs text-text-muted truncate">{user?.phone}</p>
                     </div>
 
                     {/* Menu Items */}

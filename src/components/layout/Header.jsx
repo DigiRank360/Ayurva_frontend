@@ -104,10 +104,11 @@ const Header = () => {
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
             {/* Mobile Menu Button + Search - Left */}
-            <div className="md:hidden flex items-center gap-3 flex-1">
+            <div className="xl:hidden flex items-center flex-none mr-2 sm:mr-3">
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="text-text-heading hover:text-accent-gold transition-colors"
+                className="text-text-heading hover:text-accent-gold transition-colors p-1 -ml-1"
+                aria-label="Open menu"
               >
                 <Menu size={24} />
               </button>
@@ -122,9 +123,9 @@ const Header = () => {
             </div>
 
             {/* Logo - Center/Left */}
-            <div className="flex-shrink-0 flex items-center justify-center md:justify-start flex-1 md:flex-none">
+            <div className="min-w-0 flex items-center justify-center xl:justify-start flex-1 xl:flex-none">
               <Link to="/" className="flex items-center gap-2 group">
-                <div className="relative aspect-[2112/744] w-[clamp(8.5rem,39vw,11rem)] flex-shrink-0 overflow-hidden bg-transparent transition-transform duration-300 group-hover:scale-[1.03] sm:w-48">
+                <div className="relative aspect-[2112/744] w-[clamp(6.5rem,32vw,11rem)] max-w-full flex-shrink overflow-hidden bg-transparent transition-transform duration-300 group-hover:scale-[1.03] sm:w-48">
                   <img
                     src={logo}
                     alt="Ayurva PRO"
@@ -181,7 +182,7 @@ const Header = () => {
             </nav>
 
             {/* Icons - Right */}
-            <div className="flex items-center justify-end gap-2 sm:gap-3 md:gap-5 flex-1 md:flex-none">
+            <div className="flex items-center justify-end gap-1.5 sm:gap-3 xl:gap-5 flex-none ml-2 sm:ml-3">
               {/* Desktop Search - Hidden on Mobile */}
               <div className="hidden sm:block relative group">
                 <input
@@ -198,7 +199,8 @@ const Header = () => {
               {/* Mobile Search Icon */}
               <button
                 onClick={() => setIsSearchOpen(!isSearchOpen)}
-                className="md:hidden text-text-heading hover:text-accent-gold transition-colors"
+                className="sm:hidden text-text-heading hover:text-accent-gold transition-colors p-1"
+                aria-label="Search"
               >
                 <Search size={20} />
               </button>
@@ -240,7 +242,7 @@ const Header = () => {
           {/* Mobile Search Bar - Slides down below header */}
           <div
             className={cn(
-              "md:hidden overflow-hidden transition-all duration-300 ease-in-out",
+              "sm:hidden overflow-hidden transition-all duration-300 ease-in-out",
               isSearchOpen ? "max-h-20 mt-4" : "max-h-0",
             )}
           >
@@ -291,8 +293,8 @@ const Header = () => {
           >
             <div className="flex flex-col h-full bg-[#1A0F0F] text-white">
               {/* Header of Drawer */}
-              <div className="p-6 flex justify-between items-center border-b border-white/10">
-                <div className="flex aspect-[2112/744] w-52 items-center rounded-md border border-[#e4b52f] bg-[#f5f3ea] px-2 py-1 shadow-md">
+              <div className="p-4 sm:p-6 flex justify-between items-center gap-3 border-b border-white/10">
+                <div className="flex aspect-[2112/744] w-44 sm:w-52 min-w-0 items-center rounded-md border border-[#e4b52f] bg-[#f5f3ea] px-2 py-1 shadow-md">
                   <img
                     src={logo}
                     alt="Ayurva PRO"

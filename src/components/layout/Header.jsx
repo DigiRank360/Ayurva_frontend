@@ -77,14 +77,6 @@ const Header = () => {
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "Shop All Products", path: "/shop" },
-    {
-      name: "Shop by Category",
-      path: "/shop",
-      children: [
-        { name: "Sugar Wellness", path: "/shop?category=Sugar%20Wellness" },
-        { name: "Sexual Wellness", path: "/shop?category=Sexual%20Wellness" },
-      ],
-    },
     { name: "Combo Packages", path: "/combo-packages" },
     { name: "Refer & Earn", path: "/refer-and-earn" },
     { name: "About", path: "/about" },
@@ -103,7 +95,7 @@ const Header = () => {
       >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
-            {/* Mobile Menu Button + Search - Left */}
+            {/* Mobile Menu Button - Left */}
             <div className="xl:hidden flex items-center flex-none mr-2 sm:mr-3">
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -112,14 +104,6 @@ const Header = () => {
               >
                 <Menu size={24} />
               </button>
-
-              {/* Mobile Search Icon */}
-              {/* <button
-                                onClick={() => setIsSearchOpen(!isSearchOpen)}
-                                className="text-text-heading hover:text-accent-gold transition-colors"
-                            >
-                                <Search size={22} />
-                            </button> */}
             </div>
 
             {/* Logo - Center/Left */}
@@ -183,24 +167,11 @@ const Header = () => {
 
             {/* Icons - Right */}
             <div className="flex items-center justify-end gap-1.5 sm:gap-3 xl:gap-5 flex-none ml-2 sm:ml-3">
-              {/* Desktop Search - Hidden on Mobile */}
-              <div className="hidden sm:block relative group">
-                <input
-                  type="text"
-                  placeholder="Search Ayurvedic wellness"
-                  className="w-0 group-hover:w-48 focus:w-48 transition-all duration-300 border-b border-transparent focus:border-[#0d8a7c] outline-none text-sm bg-transparent placeholder-transparent group-hover:placeholder-gray-400 focus:placeholder-gray-400 pl-7 text-[#173d3a]"
-                />
-                <Search
-                  className="absolute left-0 top-1/2 -translate-y-1/2 text-[#173d3a] cursor-pointer hover:text-[#0d8a7c] transition-colors"
-                  size={20}
-                />
-              </div>
-
-              {/* Mobile Search Icon */}
+              {/* Common Search Icon (Mobile & Desktop both) */}
               <button
                 onClick={() => setIsSearchOpen(!isSearchOpen)}
-                className="sm:hidden text-text-heading hover:text-accent-gold transition-colors p-1"
-                aria-label="Search"
+                className="text-[#173d3a] hover:text-[#0d8a7c] transition-colors p-1.5 rounded-full bg-[#f9f7f2]/70 sm:bg-transparent shadow-sm sm:shadow-none border border-white/20 sm:border-none backdrop-blur-sm sm:backdrop-blur-none"
+                aria-label="Toggle Search"
               >
                 <Search size={20} />
               </button>
@@ -211,6 +182,7 @@ const Header = () => {
               >
                 <Heart size={18} />
               </Link>
+
               <button
                 onClick={() => setIsCartOpen(true)}
                 className="text-[#173d3a] hover:text-[#0d8a7c] transition-colors relative p-1.5 rounded-full bg-[#f9f7f2]/70 shadow-sm border border-white/20 backdrop-blur-sm"
@@ -239,29 +211,30 @@ const Header = () => {
             </div>
           </div>
 
-          {/* Mobile Search Bar - Slides down below header */}
+          {/* Search Bar Dropdown - Mobile & Desktop donno me bottom per slide down hoga */}
           <div
             className={cn(
-              "sm:hidden overflow-hidden transition-all duration-300 ease-in-out",
-              isSearchOpen ? "max-h-20 mt-4" : "max-h-0",
+              "overflow-hidden transition-all duration-300 ease-in-out",
+              isSearchOpen ? "max-h-24 mt-3 pb-2" : "max-h-0",
             )}
           >
-            <div className="relative">
+            <div className="relative max-w-2xl mx-auto">
               <input
                 type="text"
                 placeholder="Search Ayurvedic products, herbs, ingredients..."
-                className="w-full px-4 py-3 pl-12 pr-4 rounded-lg border-2 border-accent-gold/30 focus:border-accent-gold outline-none text-sm bg-white shadow-sm"
+                className="w-full px-4 py-3 pl-12 pr-10 rounded-xl border-2 border-[#0d8a7c]/40 focus:border-[#0d8a7c] outline-none text-sm bg-white shadow-lg text-[#173d3a]"
                 autoFocus={isSearchOpen}
               />
               <Search
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-accent-gold"
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-[#0d8a7c]"
                 size={20}
               />
               <button
                 onClick={() => setIsSearchOpen(false)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-heading"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#173d3a] p-1 rounded-full transition-colors"
+                aria-label="Close Search"
               >
-                <X size={20} />
+                <X size={18} />
               </button>
             </div>
           </div>

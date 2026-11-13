@@ -182,8 +182,10 @@ export const deleteUserAddress = async (addressId) => {
 };
 
 // Order APIs
-export const createOrder = async (orderData) => {
-    const response = await api.post('/orders', orderData);
+export const createOrder = async (orderData, idempotencyKey = crypto.randomUUID()) => {
+    const response = await api.post('/orders', orderData, {
+        headers: { 'Idempotency-Key': idempotencyKey }
+    });
     return response.data;
 };
 
@@ -208,8 +210,8 @@ export const updateOrderToPaid = async (orderId, paymentData) => {
 };
 
 // Payment APIs (Razorpay)
-export const createPaymentOrder = async (amount) => {
-    const response = await api.post('/payment/create-order', { amount });
+export const createPaymentOrder = async (orderId) => {
+    const response = await api.post('/payment/create-order', { orderId });
     return response.data;
 };
 

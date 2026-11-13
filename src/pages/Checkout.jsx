@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Layout from '@/components/layout/Layout';
 import CheckoutSteps from '@/components/checkout/CheckoutSteps';
 import AddressList from '@/components/checkout/AddressList';
@@ -13,7 +13,6 @@ import {
     createOrder,
     createPaymentOrder,
     verifyPaymentApi,
-    updateOrderToPaid
 } from '@/lib/api';
 import { Shield, Truck, ArrowRight, Wallet, X, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -51,6 +50,15 @@ export default function Checkout() {
 
     // Payment state
     const [paymentMethod, setPaymentMethod] = useState('cod');
+    const idempotencyRef = useRef(null);
+
+    const getOrderIdempotencyKey = (payload) => {
+        const fingerprint = JSON.stringify(payload);
+        if (!idempotencyRef.current || idempotencyRef.current.fingerprint !== fingerprint) {
+            idempotencyRef.current = { fingerprint, key: crypto.randomUUID() };
+        }
+        return idempotencyRef.current.key;
+    };
 
     // Login guard — redirect if not authenticated
     useEffect(() => {
@@ -208,10 +216,7 @@ export default function Checkout() {
             orderItems,
             shippingAddress,
             paymentMethod: paymentMethod === 'online' ? 'Razorpay' : 'COD',
-            itemsPrice: subtotal,
-            taxPrice: tax,
-            shippingPrice: shipping,
-            totalPrice: total
+            couponCode: coupon?.code || null
         };
     };
 
@@ -226,10 +231,12 @@ export default function Checkout() {
         setIsProcessing(true);
 
         try {
+            const orderData = buildOrderPayload();
+            const idempotencyKey = getOrderIdempotencyKey(orderData);
             if (paymentMethod === 'online') {
-                await handleRazorpayPayment();
+                await handleRazorpayPayment(orderData, idempotencyKey);
             } else {
-                await handleCODOrder();
+                await handleCODOrder(orderData, idempotencyKey);
             }
         } catch (error) {
             console.error('Order placement failed:', error);
@@ -239,9 +246,8 @@ export default function Checkout() {
     };
 
     // COD Order Flow
-    const handleCODOrder = async () => {
-        const orderData = buildOrderPayload();
-        const createdOrder = await createOrder(orderData);
+    const handleCODOrder = async (orderData, idempotencyKey) => {
+        const createdOrder = await createOrder(orderData, idempotencyKey);
         clearCart();
         toast.success('Order placed successfully!');
         navigate('/order-confirmation', {
@@ -254,13 +260,13 @@ export default function Checkout() {
     };
 
     // Razorpay Payment Flow
-    const handleRazorpayPayment = async () => {
-        // 1. Create Razorpay order on backend
-        const razorpayOrder = await createPaymentOrder(Math.round(total));
+    const handleRazorpayPayment = async (orderData, idempotencyKey) => {
+        const createdOrder = await createOrder(orderData, idempotencyKey);
+        const razorpayOrder = await createPaymentOrder(createdOrder._id);
 
         // 2. Open Razorpay checkout
         const options = {
-            key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+            key: razorpayOrder.keyId,
             amount: razorpayOrder.amount,
             currency: razorpayOrder.currency,
             name: 'AyuvaPro',
@@ -276,23 +282,12 @@ export default function Checkout() {
                     });
 
                     if (verifyRes.status === 'success') {
-                        // 4. Create order in backend
-                        const orderData = buildOrderPayload();
-                        const createdOrder = await createOrder(orderData);
-
-                        // 5. Mark order as paid
-                        await updateOrderToPaid(createdOrder._id, {
-                            razorpayOrderId: response.razorpay_order_id,
-                            razorpayPaymentId: response.razorpay_payment_id,
-                            razorpaySignature: response.razorpay_signature
-                        });
-
                         clearCart();
                         toast.success('Payment successful! Order placed.');
                         navigate('/order-confirmation', {
                             state: {
-                                orderId: createdOrder._id,
-                                total: createdOrder.totalPrice,
+                                orderId: verifyRes.order._id,
+                                total: verifyRes.order.totalPrice,
                                 paymentMethod: 'Razorpay'
                             }
                         });

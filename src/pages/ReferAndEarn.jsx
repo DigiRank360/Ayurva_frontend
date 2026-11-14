@@ -1,9 +1,11 @@
+import { useEffect, useState } from 'react';
 import { ArrowRight, CheckCircle2, CircleHelp, ClipboardCheck, Info, Link2, UserRoundPlus } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
 import useSeo from '@/hooks/useSeo';
 import PageHero from '@/components/ui/PageHero';
-import { getMlmPortalUrl } from '@/lib/mlmPortal';
+import { getAffiliatePortalUrl, getMlmPortalUrl } from '@/lib/mlmPortal';
+import { getAffiliatePackages, getAffiliateReferralPolicy, trackAffiliateReferral } from '@/lib/api';
 import referEarnHero from '@/assets/refer-earn-hero.png';
 import referEarnImage from '@/assets/refer-earn.png';
 
@@ -44,6 +46,16 @@ const programmeDetails = [
     },
 ];
 
+const money = (value) => {
+    const amount = Number(value);
+    if (!Number.isFinite(amount)) return 'Not configured';
+    return new Intl.NumberFormat('en-IN', {
+        style: 'currency',
+        currency: 'INR',
+        maximumFractionDigits: 2,
+    }).format(amount);
+};
+
 export default function ReferAndEarn() {
     useSeo({
         title: 'AyuvaPro Referral Programme | Eligibility & Terms',
@@ -51,11 +63,61 @@ export default function ReferAndEarn() {
         path: '/refer-and-earn',
     });
     const [searchParams] = useSearchParams();
+    const affiliateReferral = searchParams.get('affiliate_ref') || '';
+    const [referralPolicy, setReferralPolicy] = useState(null);
+    const [referralConsent, setReferralConsent] = useState(false);
+    const [referralSubmitting, setReferralSubmitting] = useState(false);
+    const [referralMessage, setReferralMessage] = useState('');
+    const [referralError, setReferralError] = useState('');
+    const [affiliatePackages, setAffiliatePackages] = useState([]);
+    const [packagesError, setPackagesError] = useState('');
     const registrationUrl = getMlmPortalUrl({
         register: true,
         referralCode: searchParams.get('ref') || '',
     });
     const loginUrl = getMlmPortalUrl();
+    const affiliatePortalUrl = getAffiliatePortalUrl();
+
+    useEffect(() => {
+        let current = true;
+        getAffiliatePackages()
+            .then((packages) => { if (current) setAffiliatePackages(packages); })
+            .catch((error) => {
+                if (current) setPackagesError(error.response?.data?.message || 'Affiliate packages are currently unavailable.');
+            });
+        return () => { current = false; };
+    }, []);
+
+    useEffect(() => {
+        if (!affiliateReferral) return undefined;
+        let current = true;
+        getAffiliateReferralPolicy()
+            .then((policy) => { if (current) setReferralPolicy(policy); })
+            .catch((error) => { if (current) setReferralError(error.response?.data?.message || 'Referral tracking is currently unavailable.'); });
+        return () => { current = false; };
+    }, [affiliateReferral]);
+
+    const acceptReferralTracking = async (event) => {
+        event.preventDefault();
+        setReferralSubmitting(true);
+        setReferralError('');
+        try {
+            if (!referralPolicy?.enabled || !referralPolicy.referralConsentVersion) {
+                throw new Error('Referral tracking is not currently enabled.');
+            }
+            const result = await trackAffiliateReferral(affiliateReferral, referralPolicy.referralConsentVersion);
+            if (!result.tracked) {
+                setReferralMessage(result.message || 'This referral could not be recorded.');
+                return;
+            }
+            setReferralMessage('Your referral visit has been recorded. You can continue browsing AyurvaPro products below.');
+            setReferralConsent(false);
+        } catch (error) {
+            setReferralError(error.response?.data?.message || error.message || 'Referral tracking could not be completed.');
+        } finally {
+            setReferralSubmitting(false);
+        }
+    };
 
     return (
         <Layout>
@@ -66,7 +128,7 @@ export default function ReferAndEarn() {
                 currentPage="Refer & Earn"
             >
                 {registrationUrl && loginUrl ? (
-                    <div className="flex flex-col justify-center gap-3 px-4 sm:flex-row">
+                    <div className="flex flex-col justify-center gap-3 px-4 sm:flex-row sm:flex-wrap">
                         <a
                             href={registrationUrl}
                             className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-[#946000] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#a97108] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f3d7aa] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
@@ -79,6 +141,14 @@ export default function ReferAndEarn() {
                         >
                             Member Sign In
                         </a>
+                        {affiliatePortalUrl && (
+                            <a
+                                href={affiliatePortalUrl}
+                                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-[#f3d7aa]/80 px-6 py-3 text-sm font-bold text-[#f3d7aa] transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f3d7aa] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                            >
+                                Affiliate Partner Sign In <ArrowRight size={16} aria-hidden="true" />
+                            </a>
+                        )}
                     </div>
                 ) : (
                     <p role="status" className="mx-auto max-w-xl rounded-lg border border-white/30 bg-black/20 p-4 text-sm leading-6 text-white">
@@ -86,6 +156,40 @@ export default function ReferAndEarn() {
                     </p>
                 )}
             </PageHero>
+
+            {affiliateReferral && (
+                <section className="bg-[#f5f2eb] px-4 pt-6 sm:px-6 lg:px-8" aria-labelledby="affiliate-referral-consent-heading">
+                    <div className="mx-auto max-w-4xl rounded-2xl border border-[#dce6dc] bg-white p-5 shadow-sm sm:p-7">
+                        <div className="flex items-start gap-3">
+                            <Link2 size={20} className="mt-1 shrink-0 text-[#315a4c]" aria-hidden="true" />
+                            <div className="w-full">
+                                <h2 id="affiliate-referral-consent-heading" className="text-lg font-bold text-[#173d3a]">Affiliate referral link</h2>
+                                {referralMessage ? (
+                                    <p className="mt-2 text-sm leading-6 text-[#426251]" role="status">{referralMessage}</p>
+                                ) : referralPolicy?.enabled ? (
+                                    <form className="mt-3 space-y-4" onSubmit={acceptReferralTracking}>
+                                        <p className="text-sm leading-6 text-[#626d67]">
+                                            If you agree, AyurvaPro will record this referral visit and use a time-limited attribution cookie to associate eligible activity with the referring partner. This does not change product prices or guarantee any reward.
+                                        </p>
+                                        <label className="flex items-start gap-2 text-sm leading-6 text-[#52645a]">
+                                            <input className="mt-1 accent-[#315a4c]" type="checkbox" checked={referralConsent} onChange={(event) => setReferralConsent(event.target.checked)} />
+                                            <span>I consent to referral tracking under policy version <strong>{referralPolicy.referralConsentVersion}</strong>. See our <Link to="/privacy-policy" className="font-semibold underline underline-offset-2">Privacy Policy</Link>.</span>
+                                        </label>
+                                        <button type="submit" disabled={!referralConsent || referralSubmitting} className="inline-flex min-h-10 items-center gap-2 rounded-lg bg-[#315a4c] px-4 py-2 text-sm font-bold text-white transition hover:bg-[#234638] disabled:cursor-not-allowed disabled:opacity-50">
+                                            {referralSubmitting ? 'Recording consent…' : 'Accept and continue'} <ArrowRight size={15} aria-hidden="true" />
+                                        </button>
+                                    </form>
+                                ) : referralPolicy ? (
+                                    <p className="mt-2 text-sm leading-6 text-[#626d67]" role="status">The affiliate referral programme is not currently enabled. No referral tracking has occurred.</p>
+                                ) : (
+                                    <p className="mt-2 text-sm leading-6 text-[#626d67]" role="status">Checking whether referral tracking is available…</p>
+                                )}
+                                {referralError && <p className="mt-3 text-sm text-red-700" role="alert">{referralError}</p>}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            )}
 
             <main className="bg-[#f5f2eb] px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
                 <div className="mx-auto max-w-7xl">
@@ -152,6 +256,61 @@ export default function ReferAndEarn() {
                                 </article>
                             ))}
                         </div>
+                    </section>
+
+                    <section className="border-t border-[#e5e0d6] py-14 sm:py-16" aria-labelledby="affiliate-packages-heading">
+                        <div className="mx-auto max-w-3xl text-center">
+                            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#8b5a08]">Configured by AyuvaPro</p>
+                            <h2 id="affiliate-packages-heading" className="mt-3 text-3xl font-bold text-[#123d32] sm:text-4xl">
+                                Affiliate Packages
+                            </h2>
+                            <p className="mt-4 text-sm leading-7 text-[#5d6964] sm:text-base">
+                                Package prices, contents and programme settings below are fetched from the active package catalogue. Participation and rewards remain subject to current approved terms.
+                            </p>
+                        </div>
+                        {packagesError ? (
+                            <p className="mx-auto mt-8 max-w-3xl rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800" role="alert">{packagesError}</p>
+                        ) : affiliatePackages.length ? (
+                            <div className="mx-auto mt-9 grid max-w-5xl gap-5 md:grid-cols-2">
+                                {affiliatePackages.map((item) => (
+                                    <article key={item._id} className="rounded-2xl border border-[#e5e0d6] bg-white p-6 shadow-[0_8px_24px_rgba(23,61,58,0.04)]">
+                                        <div className="flex items-start justify-between gap-4">
+                                            <div>
+                                                <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#8b5a08]">{item.code} · Version {item.version}</p>
+                                                <h3 className="mt-2 text-xl font-bold text-[#173d3a]">{item.name}</h3>
+                                            </div>
+                                            <span className="rounded-full bg-[#e9efe8] px-3 py-1 text-xs font-bold text-[#315a4c]">{item.durationMonths} months</span>
+                                        </div>
+                                        <div className="mt-5 grid grid-cols-2 gap-3">
+                                            <div className="rounded-xl bg-[#f7f8f5] p-3"><span className="block text-xs text-[#68736d]">Current offer</span><strong className="mt-1 block text-lg text-[#173d3a]">{money(item.offerPrice)}</strong></div>
+                                            <div className="rounded-xl bg-[#f7f8f5] p-3"><span className="block text-xs text-[#68736d]">Displayed MRP</span><strong className="mt-1 block text-lg text-[#173d3a]">{money(item.mrp)}</strong></div>
+                                        </div>
+                                        <dl className="mt-4 grid gap-2 text-sm text-[#626d67]">
+                                            <div className="flex justify-between gap-3"><dt>Video reward setting</dt><dd className="text-right font-semibold">{money(item.videoReward)}</dd></div>
+                                            <div className="flex justify-between gap-3"><dt>Daily referral cap</dt><dd className="font-semibold">{item.dailyReferralCap}</dd></div>
+                                            <div className="flex justify-between gap-3"><dt>Reward window</dt><dd className="font-semibold">{item.rewardWindowDays} days</dd></div>
+                                            <div className="flex justify-between gap-3"><dt>Doctor sessions</dt><dd className="font-semibold">{item.doctorSessionsPerMonth} per month</dd></div>
+                                        </dl>
+                                        <div className="mt-4 border-t border-[#e5e0d6] pt-4">
+                                            <p className="text-xs font-bold uppercase tracking-[0.1em] text-[#68736d]">Package contents</p>
+                                            {item.items?.length ? (
+                                                <ul className="mt-2 grid gap-1 text-sm text-[#26333e]">
+                                                    {item.items.map((entry, index) => <li key={`${entry.product || entry.nameSnapshot}-${index}`}>{entry.nameSnapshot} × {entry.quantity}</li>)}
+                                                </ul>
+                                            ) : <p className="mt-2 text-sm text-[#68736d]">Contents are not configured.</p>}
+                                        </div>
+                                        {affiliatePortalUrl && <a href={affiliatePortalUrl} className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#315a4c] underline underline-offset-4 hover:text-[#0d766c]">Continue in partner portal <ArrowRight size={15} aria-hidden="true" /></a>}
+                                    </article>
+                                ))}
+                            </div>
+                        ) : (
+                            <p className="mx-auto mt-8 max-w-3xl rounded-xl border border-[#e5e0d6] bg-white p-5 text-center text-sm text-[#626d67]">
+                                No active affiliate packages are currently published. Package details will appear here after an approved catalogue version is activated.
+                            </p>
+                        )}
+                        <p className="mx-auto mt-5 max-w-3xl text-center text-xs leading-6 text-[#68736d]">
+                            Displayed settings are not earnings promises. Referral qualification, commission calculations, taxes, refunds and support availability follow approved programme terms.
+                        </p>
                     </section>
 
                     <section className="rounded-2xl border border-[#e5dcc8] bg-[#fcfaf5] p-6 sm:p-8" aria-labelledby="referral-help-heading">

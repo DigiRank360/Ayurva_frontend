@@ -11,6 +11,24 @@ const api = axios.create({
     withCredentials: true // Ensure cookies are sent
 });
 
+export const getAffiliateReferralPolicy = async () => {
+    const response = await api.get('/affiliate/referral-policy');
+    return response.data;
+};
+
+export const getAffiliatePackages = async () => {
+    const response = await api.get('/affiliate/packages');
+    return response.data;
+};
+
+export const trackAffiliateReferral = async (token, consentVersion) => {
+    const response = await api.post(`/affiliate/referrals/${encodeURIComponent(token)}/visit`, {
+        consentGranted: true,
+        consentVersion,
+    });
+    return response.data;
+};
+
 // Request interceptor for adding auth token
 api.interceptors.request.use(
     (config) => {

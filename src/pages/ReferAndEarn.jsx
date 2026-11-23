@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ArrowRight, CheckCircle2, CircleHelp, ClipboardCheck, Info, Link2, UserRoundPlus } from 'lucide-react';
+import { ArrowRight, CheckCircle2, CircleHelp, ClipboardCheck, ExternalLink, Info, Link2, Play, UserRoundPlus } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
 import useSeo from '@/hooks/useSeo';
@@ -8,6 +8,8 @@ import { getAffiliatePortalUrl, getMlmPortalUrl } from '@/lib/mlmPortal';
 import { getAffiliatePackages, getAffiliateReferralPolicy, trackAffiliateReferral } from '@/lib/api';
 import referEarnHero from '@/assets/refer-earn-hero.png';
 import referEarnImage from '@/assets/refer-earn.png';
+
+const REFERRAL_PROGRAM_VIDEO_ID = 'mVCn9WFa4s4';
 
 const steps = [
     {
@@ -156,6 +158,48 @@ export default function ReferAndEarn() {
                     </p>
                 )}
             </PageHero>
+
+            <section className="bg-[#f5f2eb] px-4 py-8 sm:px-6 sm:py-12 lg:px-8" aria-labelledby="referral-video-heading">
+                <div className="mx-auto grid max-w-7xl items-center gap-8 rounded-3xl border border-[#e5e0d6] bg-white p-5 shadow-[0_12px_36px_rgba(23,61,58,0.06)] sm:p-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12 lg:p-10">
+                    <a
+                        href={`https://www.youtube.com/watch?v=${REFERRAL_PROGRAM_VIDEO_ID}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Watch the AyuvaPro referral programme video on YouTube"
+                        className="group relative grid aspect-video place-items-center overflow-hidden rounded-2xl bg-gradient-to-br from-[#173d3a] via-[#245746] to-[#946000] p-6 text-center shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315a4c] focus-visible:ring-offset-4"
+                    >
+                        <span className="pointer-events-none absolute -right-10 -top-20 h-64 w-64 rounded-full border border-white/15 shadow-[0_0_0_30px_rgba(255,255,255,0.04),0_0_0_65px_rgba(255,255,255,0.03)]" aria-hidden="true" />
+                        <span className="relative flex flex-col items-center text-white">
+                            <span className="grid h-16 w-16 place-items-center rounded-full border border-white/50 bg-white/15 shadow-xl backdrop-blur transition group-hover:scale-105">
+                                <Play size={25} fill="currentColor" aria-hidden="true" />
+                            </span>
+                            <span className="mt-4 text-[10px] font-bold uppercase tracking-[0.2em] text-white/75">AyuvaPro · Referral programme</span>
+                            <span className="mt-1 text-lg font-bold sm:text-xl">Watch the introduction</span>
+                            <ExternalLink size={16} className="mt-3 text-white/80" aria-hidden="true" />
+                        </span>
+                    </a>
+                    <div className="py-2">
+                        <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#8b5a08]">Watch &amp; learn</p>
+                        <h2 id="referral-video-heading" className="mt-3 text-2xl font-bold text-[#123d32] sm:text-3xl">
+                            AyuvaPro Referral Programme
+                        </h2>
+                        <p className="mt-4 text-sm leading-7 text-[#5d6964] sm:text-base">
+                            Get to know the referral programme, how to participate and what to expect before you get started.
+                        </p>
+                        <a
+                            href={`https://www.youtube.com/watch?v=${REFERRAL_PROGRAM_VIDEO_ID}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-lg bg-[#315a4c] px-5 py-3 text-sm font-bold text-white transition hover:bg-[#234638] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315a4c] focus-visible:ring-offset-2"
+                        >
+                            Watch on YouTube <ExternalLink size={16} aria-hidden="true" />
+                        </a>
+                        <p className="mt-3 text-xs leading-5 text-[#68736d]">
+                            Opens in a new tab on YouTube.
+                        </p>
+                    </div>
+                </div>
+            </section>
 
             {affiliateReferral && (
                 <section className="bg-[#f5f2eb] px-4 pt-6 sm:px-6 lg:px-8" aria-labelledby="affiliate-referral-consent-heading">

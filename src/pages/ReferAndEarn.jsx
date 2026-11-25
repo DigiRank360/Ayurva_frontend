@@ -1,15 +1,20 @@
-import { useEffect, useState } from 'react';
-import { ArrowRight, CheckCircle2, CircleHelp, ClipboardCheck, ExternalLink, Info, Link2, Play, UserRoundPlus } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { ArrowRight, CheckCircle2, CircleHelp, ClipboardCheck, Info, Link2, UserRoundPlus } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
 import useSeo from '@/hooks/useSeo';
 import PageHero from '@/components/ui/PageHero';
 import { getAffiliatePortalUrl, getMlmPortalUrl } from '@/lib/mlmPortal';
-import { getAffiliatePackages, getAffiliateReferralPolicy, trackAffiliateReferral } from '@/lib/api';
+import {
+    getAffiliatePackages,
+    getAffiliateReferralPolicy,
+    getAffiliateReferralVideo,
+    recordAffiliateVideoProgress,
+    startAffiliateVideo,
+    trackAffiliateReferral,
+} from '@/lib/api';
 import referEarnHero from '@/assets/refer-earn-hero.png';
 import referEarnImage from '@/assets/refer-earn.png';
-
-const REFERRAL_PROGRAM_VIDEO_ID = 'mVCn9WFa4s4';
 
 const steps = [
     {
@@ -49,7 +54,7 @@ const programmeDetails = [
 ];
 
 const money = (value) => {
-    const amount = Number(value);
+    const amount = Number(value?.$numberDecimal ?? value);
     if (!Number.isFinite(amount)) return 'Not configured';
     return new Intl.NumberFormat('en-IN', {
         style: 'currency',
@@ -71,6 +76,14 @@ export default function ReferAndEarn() {
     const [referralSubmitting, setReferralSubmitting] = useState(false);
     const [referralMessage, setReferralMessage] = useState('');
     const [referralError, setReferralError] = useState('');
+    const [referralTracked, setReferralTracked] = useState(false);
+    const [referralVideo, setReferralVideo] = useState(null);
+    const [videoSessionToken, setVideoSessionToken] = useState('');
+    const [videoMessage, setVideoMessage] = useState('');
+    const [videoError, setVideoError] = useState('');
+    const [videoStarting, setVideoStarting] = useState(false);
+    const requestedMilestones = useRef(new Set());
+    const recordingProgress = useRef(false);
     const [affiliatePackages, setAffiliatePackages] = useState([]);
     const [packagesError, setPackagesError] = useState('');
     const registrationUrl = getMlmPortalUrl({
@@ -91,11 +104,26 @@ export default function ReferAndEarn() {
     }, []);
 
     useEffect(() => {
+        setReferralPolicy(null);
+        setReferralConsent(false);
+        setReferralMessage('');
+        setReferralError('');
+        setReferralTracked(false);
+        setReferralVideo(null);
+        setVideoSessionToken('');
+        setVideoMessage('');
+        setVideoError('');
+        requestedMilestones.current = new Set();
         if (!affiliateReferral) return undefined;
         let current = true;
         getAffiliateReferralPolicy()
             .then((policy) => { if (current) setReferralPolicy(policy); })
             .catch((error) => { if (current) setReferralError(error.response?.data?.message || 'Referral tracking is currently unavailable.'); });
+        getAffiliateReferralVideo(affiliateReferral)
+            .then((video) => { if (current) setReferralVideo(video); })
+            .catch((error) => {
+                if (current) setVideoError(error.response?.data?.message || 'The shared video campaign is unavailable.');
+            });
         return () => { current = false; };
     }, [affiliateReferral]);
 
@@ -112,12 +140,69 @@ export default function ReferAndEarn() {
                 setReferralMessage(result.message || 'This referral could not be recorded.');
                 return;
             }
+            setReferralTracked(true);
             setReferralMessage('Your referral visit has been recorded. You can continue browsing AyurvaPro products below.');
             setReferralConsent(false);
         } catch (error) {
             setReferralError(error.response?.data?.message || error.message || 'Referral tracking could not be completed.');
         } finally {
             setReferralSubmitting(false);
+        }
+    };
+
+    const startReferralVideo = async (event) => {
+        if (videoSessionToken) return;
+        event.currentTarget.pause();
+        if (videoStarting) return;
+        setVideoStarting(true);
+        setVideoError('');
+        setVideoMessage('');
+        try {
+            const session = await startAffiliateVideo(affiliateReferral, referralPolicy.referralConsentVersion);
+            setVideoSessionToken(session.sessionToken);
+            requestedMilestones.current = new Set();
+            setVideoMessage('Video session ready. Press Play again to start watching.');
+        } catch (error) {
+            setVideoError(error.response?.data?.message || error.message || 'Could not start the video session.');
+        } finally {
+            setVideoStarting(false);
+        }
+    };
+
+    const recordReferralVideoTime = async (event) => {
+        if (!videoSessionToken || event.currentTarget.paused || !event.currentTarget.duration || recordingProgress.current) return;
+        const watchedPercent = event.currentTarget.currentTime / event.currentTarget.duration * 100;
+        const thresholds = [25, 50, 75].filter((percent) => percent < referralVideo.minimumCompletionPercent);
+        const milestones = [
+            ...thresholds.map((percent) => [`VIDEO_${percent}`, percent]),
+            ['VIDEO_COMPLETE', referralVideo.minimumCompletionPercent],
+        ];
+        recordingProgress.current = true;
+        try {
+            for (const [milestone, percent] of milestones) {
+                if (watchedPercent < percent || requestedMilestones.current.has(milestone)) continue;
+                requestedMilestones.current.add(milestone);
+                try {
+                    const result = await recordAffiliateVideoProgress(videoSessionToken, milestone);
+                    if (milestone === 'VIDEO_COMPLETE') {
+                        if (result.qualified) {
+                            setVideoMessage(`Your view qualified for ${money(result.rewardAmount)}. It is pending admin review.`);
+                        } else {
+                            setVideoMessage(result.reason === 'CAMPAIGN_LIMIT_REACHED'
+                                ? 'This campaign has reached its reward limit.'
+                                : result.reason === 'DUPLICATE_VISITOR'
+                                    ? 'This account has already received a reward for a recent video view.'
+                                    : 'The video was recorded, but this view did not qualify for a reward.');
+                        }
+                    }
+                } catch (error) {
+                    requestedMilestones.current.delete(milestone);
+                    setVideoError(error.response?.data?.message || error.message || 'Video progress could not be recorded.');
+                    return;
+                }
+            }
+        } finally {
+            recordingProgress.current = false;
         }
     };
 
@@ -159,48 +244,6 @@ export default function ReferAndEarn() {
                 )}
             </PageHero>
 
-            <section className="bg-[#f5f2eb] px-4 py-8 sm:px-6 sm:py-12 lg:px-8" aria-labelledby="referral-video-heading">
-                <div className="mx-auto grid max-w-7xl items-center gap-8 rounded-3xl border border-[#e5e0d6] bg-white p-5 shadow-[0_12px_36px_rgba(23,61,58,0.06)] sm:p-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12 lg:p-10">
-                    <a
-                        href={`https://www.youtube.com/watch?v=${REFERRAL_PROGRAM_VIDEO_ID}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="Watch the AyuvaPro referral programme video on YouTube"
-                        className="group relative grid aspect-video place-items-center overflow-hidden rounded-2xl bg-gradient-to-br from-[#173d3a] via-[#245746] to-[#946000] p-6 text-center shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315a4c] focus-visible:ring-offset-4"
-                    >
-                        <span className="pointer-events-none absolute -right-10 -top-20 h-64 w-64 rounded-full border border-white/15 shadow-[0_0_0_30px_rgba(255,255,255,0.04),0_0_0_65px_rgba(255,255,255,0.03)]" aria-hidden="true" />
-                        <span className="relative flex flex-col items-center text-white">
-                            <span className="grid h-16 w-16 place-items-center rounded-full border border-white/50 bg-white/15 shadow-xl backdrop-blur transition group-hover:scale-105">
-                                <Play size={25} fill="currentColor" aria-hidden="true" />
-                            </span>
-                            <span className="mt-4 text-[10px] font-bold uppercase tracking-[0.2em] text-white/75">AyuvaPro · Referral programme</span>
-                            <span className="mt-1 text-lg font-bold sm:text-xl">Watch the introduction</span>
-                            <ExternalLink size={16} className="mt-3 text-white/80" aria-hidden="true" />
-                        </span>
-                    </a>
-                    <div className="py-2">
-                        <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#8b5a08]">Watch &amp; learn</p>
-                        <h2 id="referral-video-heading" className="mt-3 text-2xl font-bold text-[#123d32] sm:text-3xl">
-                            AyuvaPro Referral Programme
-                        </h2>
-                        <p className="mt-4 text-sm leading-7 text-[#5d6964] sm:text-base">
-                            Get to know the referral programme, how to participate and what to expect before you get started.
-                        </p>
-                        <a
-                            href={`https://www.youtube.com/watch?v=${REFERRAL_PROGRAM_VIDEO_ID}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-lg bg-[#315a4c] px-5 py-3 text-sm font-bold text-white transition hover:bg-[#234638] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315a4c] focus-visible:ring-offset-2"
-                        >
-                            Watch on YouTube <ExternalLink size={16} aria-hidden="true" />
-                        </a>
-                        <p className="mt-3 text-xs leading-5 text-[#68736d]">
-                            Opens in a new tab on YouTube.
-                        </p>
-                    </div>
-                </div>
-            </section>
-
             {affiliateReferral && (
                 <section className="bg-[#f5f2eb] px-4 pt-6 sm:px-6 lg:px-8" aria-labelledby="affiliate-referral-consent-heading">
                     <div className="mx-auto max-w-4xl rounded-2xl border border-[#dce6dc] bg-white p-5 shadow-sm sm:p-7">
@@ -231,6 +274,33 @@ export default function ReferAndEarn() {
                                 {referralError && <p className="mt-3 text-sm text-red-700" role="alert">{referralError}</p>}
                             </div>
                         </div>
+                    </div>
+                </section>
+            )}
+
+            {affiliateReferral && referralVideo && referralTracked && (
+                <section className="bg-[#f5f2eb] px-4 py-8 sm:px-6 sm:py-12 lg:px-8" aria-labelledby="affiliate-campaign-video-heading">
+                    <div className="mx-auto max-w-4xl rounded-2xl border border-[#dce6dc] bg-white p-5 shadow-sm sm:p-7">
+                        <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#8b5a08]">Affiliate video campaign</p>
+                        <h2 id="affiliate-campaign-video-heading" className="mt-2 text-2xl font-bold text-[#173d3a]">{referralVideo.name}</h2>
+                        <video
+                            className="mt-5 aspect-video w-full rounded-xl bg-black"
+                            controls
+                            playsInline
+                            preload="metadata"
+                            poster={referralVideo.video.thumbnailUrl}
+                            onPlay={startReferralVideo}
+                            onTimeUpdate={recordReferralVideoTime}
+                        >
+                            <source src={referralVideo.video.secureUrl} />
+                            Your browser does not support video playback.
+                        </video>
+                        <p className="mt-3 text-sm leading-6 text-gray-600">
+                            Sign in with a phone-verified account. Watch at least {referralVideo.minimumCompletionPercent}% of the video; qualifying rewards are subject to campaign limits and admin review.
+                        </p>
+                        {videoStarting && <p className="mt-2 text-sm text-gray-600" role="status">Starting secure video session…</p>}
+                        {videoMessage && <p className="mt-2 text-sm text-emerald-800" role="status">{videoMessage}</p>}
+                        {videoError && <p className="mt-2 text-sm text-red-700" role="alert">{videoError}</p>}
                     </div>
                 </section>
             )}

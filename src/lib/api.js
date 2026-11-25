@@ -29,6 +29,24 @@ export const trackAffiliateReferral = async (token, consentVersion) => {
     return response.data;
 };
 
+export const getAffiliateReferralVideo = async (token) => {
+    const response = await api.get(`/affiliate/videos/${encodeURIComponent(token)}`);
+    return response.data;
+};
+
+export const startAffiliateVideo = async (token, consentVersion) => {
+    const response = await api.post(`/affiliate/videos/${encodeURIComponent(token)}/start`, {
+        consentGranted: true,
+        consentVersion,
+    });
+    return response.data;
+};
+
+export const recordAffiliateVideoProgress = async (sessionToken, milestone) => {
+    const response = await api.post('/affiliate/videos/progress', { sessionToken, milestone });
+    return response.data;
+};
+
 // Request interceptor for adding auth token
 api.interceptors.request.use(
     (config) => {
